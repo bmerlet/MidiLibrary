@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{060AD301-C405-496E-A704-060E6099AF10}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MidiLibrary</RootNamespace>
+    <AssemblyName>MidiLibrary</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CommonMessages\MidiChannelAfterTouchMessage.cs" />
+    <Compile Include="CommonMessages\MidiCommonMessage.cs" />
+    <Compile Include="CommonMessages\MidiControlChangeMessage.cs" />
+    <Compile Include="CommonMessages\MidiNoteMessage.cs" />
+    <Compile Include="CommonMessages\MidiPatchChangeMessage.cs" />
+    <Compile Include="CommonMessages\MidiPitchChangeMessage.cs" />
+    <Compile Include="FileIO\MidiFileFormat.cs" />
+    <Compile Include="FileIO\MidiFileFormatWriter.cs" />
+    <Compile Include="FileIO\MidiFileWriter.cs" />
+    <Compile Include="Instruments\Bank.cs" />
+    <Compile Include="Instruments\Controller.cs" />
+    <Compile Include="Instruments\Instrument.cs" />
+    <Compile Include="Instruments\InstrumentFileParser.cs" />
+    <Compile Include="Instruments\NoteName.cs" />
+    <Compile Include="Instruments\Patch.cs" />
+    <Compile Include="Instruments\ProgramNumber.cs" />
+    <Compile Include="Instruments\Sequence.cs" />
+    <Compile Include="Instruments\SequenceGroup.cs" />
+    <Compile Include="MetaMessages\ISequencerMetaMessage.cs" />
+    <Compile Include="MetaMessages\MidiMetaKeySignatureMessage .cs" />
+    <Compile Include="MetaMessages\MidiMetaMessage .cs" />
+    <Compile Include="MetaMessages\MidiMetaMidiPortMessage .cs" />
+    <Compile Include="MetaMessages\MidiMetaSmpteOffsetMessage .cs" />
+    <Compile Include="MetaMessages\MidiMetaTempoMessage .cs" />
+    <Compile Include="MetaMessages\MidiMetaTextMessage .cs" />
+    <Compile Include="MetaMessages\MidiMetaTimeSignatureMessage .cs" />
+    <Compile Include="MetaMessages\MidiMetaTrackSequenceNumberMessage .cs" />
+    <Compile Include="MidiEnum.cs" />
+    <Compile Include="MidiEvent.cs" />
+    <Compile Include="FileIO\MidiFileFormatReader.cs" />
+    <Compile Include="FileIO\MidiFileParser.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SerMidiMessage.cs" />
+    <Compile Include="WindowsMultiMedia\MidiBuffer.cs" />
+    <Compile Include="WindowsMultiMedia\MidiEventArgs.cs" />
+    <Compile Include="WindowsMultiMedia\MidiInParser.cs" />
+    <Compile Include="MidiMessage.cs" />
+    <Compile Include="WindowsMultiMedia\MidiInputManager.cs" />
+    <Compile Include="WindowsMultiMedia\MidiOutBuilder.cs" />
+    <Compile Include="MidiSequence.cs" />
+    <Compile Include="MidiTrack.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sequencer\HighResolutionClock.cs" />
+    <Compile Include="Sequencer\ISequencerEvent.cs" />
+    <Compile Include="Sequencer\ISequencerMessage.cs" />
+    <Compile Include="Sequencer\MidiSequencer.cs" />
+    <Compile Include="Sequencer\SequencerEventArg.cs" />
+    <Compile Include="SysexMessages\MidiSysexMessage.cs" />
+    <Compile Include="WindowsMultiMedia\MidiInputPort.cs" />
+    <Compile Include="WindowsMultiMedia\MidiOutputPort.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\MotifRackES.ins" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\GM.ins" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
