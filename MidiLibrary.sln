@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MidiLibrary", "MidiLibrary\MidiLibrary.csproj", "{060AD301-C405-496E-A704-060E6099AF10}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{414E6F24-936F-485A-B004-14FD3CC38F76}"
+	ProjectSection(ProjectDependencies) = postProject
+		{060AD301-C405-496E-A704-060E6099AF10} = {060AD301-C405-496E-A704-060E6099AF10}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{060AD301-C405-496E-A704-060E6099AF10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{060AD301-C405-496E-A704-060E6099AF10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{060AD301-C405-496E-A704-060E6099AF10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{060AD301-C405-496E-A704-060E6099AF10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{414E6F24-936F-485A-B004-14FD3CC38F76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{414E6F24-936F-485A-B004-14FD3CC38F76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{414E6F24-936F-485A-B004-14FD3CC38F76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{414E6F24-936F-485A-B004-14FD3CC38F76}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
