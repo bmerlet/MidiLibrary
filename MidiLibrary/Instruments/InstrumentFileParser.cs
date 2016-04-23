@@ -18,11 +18,13 @@ namespace MidiLibrary.Instruments
     {
         #region Entry points
 
+        // Parse an instrument file from a stream
         public static Instrument[] Parse(Stream stream)
         {
             return Parse(new StreamReader(stream));
         }
 
+        // Parse an instrument file from a reader
         public static Instrument[] Parse(TextReader reader)
         {
             var items = ParseTextFile(reader);
@@ -32,9 +34,20 @@ namespace MidiLibrary.Instruments
             return instruments.ToArray();
         }
 
+        // Parse all known instruments (embedded and in $USER/MidiInstruments)
         public static Instrument[] GetKnownInstruments()
         {
+            string parsingErrors;
+            return GetKnownInstruments(out parsingErrors);
+        }
+
+        // Parse all known instruments (embedded and in $USER/MidiInstruments), return any parsing error in a string
+        public static Instrument[] GetKnownInstruments(out string parsingErrors)
+        {
+            const string MidInstrumentDirectory = "MidiInstruments";
+
             var result = new List<Instrument>();
+            parsingErrors = null;
 
             // Generic GM instrument definition
             result.AddRange(ParseEmbeddedResourceInstrumentFile("GM"));
@@ -42,9 +55,42 @@ namespace MidiLibrary.Instruments
             // Motif-Rack ES
             result.AddRange(ParseEmbeddedResourceInstrumentFile("MotifRackES"));
 
+            // Read all the instruments in $USER/MidiInstruments
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) +
+                Path.DirectorySeparatorChar + MidInstrumentDirectory;
+
+            if (Directory.Exists(path))
+            {
+                foreach(var file in Directory.EnumerateFiles(path, "*.ins"))
+                {
+                     try
+                     {
+                         StreamReader reader = new StreamReader(file);
+                         using (reader)
+                         {
+                             result.AddRange(Parse(reader));
+                             reader.Close();
+                         }
+                     }
+                     catch (Exception e)
+                     {
+                         if (parsingErrors == null)
+                         {
+                             parsingErrors = "";
+                         }
+                         else
+                         {
+                             parsingErrors += Environment.NewLine;
+                         }
+                         parsingErrors += "Error parsing instrument file: " + file + ": " + e.Message;
+                     }
+                }
+            }
+
             return result.ToArray();
         }
 
+        // Utility to get a stream for an embedded instrument file 
         public static Instrument[] ParseEmbeddedResourceInstrumentFile(string name)
         {
             System.Reflection.Assembly myAssembly = System.Reflection.Assembly.GetExecutingAssembly();
