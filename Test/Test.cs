@@ -38,8 +38,9 @@ namespace Test
         private void TestParser()
         {
             Console.WriteLine("=== Test file parsing");
-            string origPath = "C:\\users\\bmerlet\\Documents\\Music\\Score\\Fugue1.mid";
-            string destPath = "C:\\users\\bmerlet\\Documents\\Music\\Score\\Fugue1_identical.mid";
+            string basePath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + System.IO.Path.DirectorySeparatorChar;
+            string origPath = basePath + "Inv8.mid";
+            string destPath = basePath + "Inv8_identical.mid";
             sequence = MidiFileParser.ParseMidiFile(origPath);
             Console.WriteLine("  Parsed midi file");
             MidiFileWriter.WriteMidiFile(sequence, destPath);
