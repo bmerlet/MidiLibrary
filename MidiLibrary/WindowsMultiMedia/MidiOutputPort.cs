@@ -295,7 +295,7 @@ namespace MidiLibrary.WindowsMultiMedia
             }
             else
             {
-                uint sm = MidiOutBuilder.BuildShortMessage(m);
+                uint sm = m.GetAsShortMessage();
                 st = NativeMethods.midiOutShortMsg(handle, sm);
             }
 

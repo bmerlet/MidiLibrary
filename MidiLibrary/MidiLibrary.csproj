@@ -81,7 +81,6 @@
     <Compile Include="WindowsMultiMedia\MidiInParser.cs" />
     <Compile Include="MidiMessage.cs" />
     <Compile Include="WindowsMultiMedia\MidiInputManager.cs" />
-    <Compile Include="WindowsMultiMedia\MidiOutBuilder.cs" />
     <Compile Include="MidiSequence.cs" />
     <Compile Include="MidiTrack.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

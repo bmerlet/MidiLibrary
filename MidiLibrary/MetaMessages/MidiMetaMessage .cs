@@ -50,6 +50,21 @@ namespace MidiLibrary.MetaMessages
 
         #endregion
 
+        #region Services
+
+        public override byte[] GetAsByteArray()
+        {
+            // This is not supported for messages that don't go over the wire.
+            return null;
+        }
+
+        public override uint GetAsShortMessage()
+        {
+            // Short message format not supported for meta messages
+            return uint.MaxValue;
+        }
+        #endregion
+
         #region Debug
 
         public override string ToString()

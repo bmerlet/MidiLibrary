@@ -35,5 +35,20 @@ namespace MidiLibrary.SysexMessages
         }
 
         #endregion
+
+        #region Services
+
+        public override byte[] GetAsByteArray()
+        {
+            return body;
+        }
+
+        public override uint GetAsShortMessage()
+        {
+            // Short message format not supported for sysex
+            return uint.MaxValue;
+        }
+
+        #endregion
     }
 }

@@ -75,6 +75,24 @@ namespace MidiLibrary.CommonMessages
 
         #endregion
 
+        #region Services
+
+        public override byte[] GetAsByteArray()
+        {
+            return new byte[] { GetFirstByte(), (byte)note, (byte)velocity };
+        }
+
+        public override uint GetAsShortMessage()
+        {
+            uint result = GetFirstByte();
+            result |= note << 8;
+            result |= velocity << 16;
+
+            return result;
+        }
+
+        #endregion
+
         #region Debug
 
         public override string ToString()

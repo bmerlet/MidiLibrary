@@ -41,6 +41,12 @@ namespace MidiLibrary.WindowsMultiMedia
 
         #endregion
 
+        #region Events
+
+        public event MidiEventHandler MidiInputReceived;
+
+        #endregion
+
         #region Private members
 
         // Device id
@@ -55,11 +61,8 @@ namespace MidiLibrary.WindowsMultiMedia
         // Handle when this device is opened
         private IntPtr handle;
 
-        // Callback function called by the native code, which in turn calls MidiProc() in this class
+        // Callback function called by the native code, which in turn raises the MidiInputReceived event
         private NativeMethods.MidiInProc midiInProc;
-
-        // Callback provided by the user
-        private MidiEventHandler callback;
 
         // Buffers for sysex
         private MidiBuffer[] buffers;
@@ -85,7 +88,6 @@ namespace MidiLibrary.WindowsMultiMedia
 
             // Init
             this.handle = IntPtr.Zero;
-            this.callback = null;
             this.buffers = null;
             this.partialSysex = null;
 
@@ -153,12 +155,9 @@ namespace MidiLibrary.WindowsMultiMedia
 
         #region Public methods
 
-        // Open the input port. Midi events cause the passed in callback to be called
-        public EMMError Open(MidiEventHandler callback)
+        // Open the input port. Midi events cause the MidiInputReceived event to be raised
+        public EMMError Open()
         {
-            // Memorize the user callback
-            this.callback = callback;
-
             // Open the port
             return NativeMethods.midiInOpen(
                 out handle,
@@ -207,13 +206,13 @@ namespace MidiLibrary.WindowsMultiMedia
         {
             if (wMsg == EMMMidiMessages.MIM_DATA)
             {
-                if (callback != null)
+                if (MidiInputReceived != null)
                 {
                     // Make a midi event out of the incoming params
                     MidiEvent e = MidiInParser.ParseMimDataMessage(dwParam1, dwParam2);
 
                     // Give it to the user
-                    callback(this, new MidiEventArgs(e, dwParam1, dwParam2));
+                    MidiInputReceived.Invoke(this, new MidiEventArgs(e, dwParam1, dwParam2));
                 }
             }
             else if (wMsg == EMMMidiMessages.MIMLONG_DATA)
@@ -246,7 +245,7 @@ namespace MidiLibrary.WindowsMultiMedia
 
                     // If we have a callback, either generate a sysex or
                     // memorize the data if we don't have a full sysex
-                    if (callback != null)
+                    if (MidiInputReceived != null)
                     {
                         MidiSysexMessage sysex = null;
 
@@ -302,7 +301,7 @@ namespace MidiLibrary.WindowsMultiMedia
                             var e = new MidiEvent(sysex, dwParam2);
 
                             // Give it to the user
-                            callback(this, new MidiEventArgs(e, dwParam1, dwParam2));
+                            MidiInputReceived.Invoke(this, new MidiEventArgs(e, dwParam1, dwParam2));
                         }
                     }
                 }
@@ -322,7 +321,7 @@ namespace MidiLibrary.WindowsMultiMedia
 
             if (st == EMMError.NOERROR && buffers != null)
             {
-                // The buffers have been released by the callback. Just free the array.
+                // The buffers have now been released by the callback. Just free the array.
                 buffers = null;
             }
 
@@ -336,6 +335,7 @@ namespace MidiLibrary.WindowsMultiMedia
             Reset();
             EMMError result = NativeMethods.midiInClose(handle);
             handle = IntPtr.Zero;
+            MidiInputReceived = null;
             return result;
         }
 

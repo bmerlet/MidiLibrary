@@ -62,6 +62,24 @@ namespace MidiLibrary.CommonMessages
 
         #endregion
 
+        #region Services
+
+        public override byte[] GetAsByteArray()
+        {
+            return new byte[] { GetFirstByte(), (byte)controller, (byte)value };
+        }
+
+        public override uint GetAsShortMessage()
+        {
+            uint result = GetFirstByte();
+            result |= (uint)controller << 8;
+            result |= value << 16;
+
+            return result;
+        }
+
+        #endregion
+
         #region Debug
 
         public override string ToString()

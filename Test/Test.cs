@@ -117,7 +117,9 @@ namespace Test
             loopGotShortMessage = false;
             loopGotLongMessage = false;
 
-            if (loopIn.Open(LoopInCallback) != EMMError.NOERROR)
+            loopIn.MidiInputReceived += LoopInCallback;
+
+            if (loopIn.Open() != EMMError.NOERROR)
             {
                 throw new InvalidOperationException("Cannot open loop input");
             }

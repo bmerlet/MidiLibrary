@@ -97,7 +97,7 @@ namespace MidiLibrary.FileIO
 
         {
             // Write out the command unless it is the same as the running status
-            byte firstByte = (byte)((uint)message.Command | (uint)message.Channel);
+            byte firstByte = message.GetFirstByte();
 
             if (firstByte != runningStatus)
             {

@@ -13,7 +13,7 @@ namespace MidiLibrary
     /// <summary>
     /// MidiMessage: Base class for all midi messages
     /// </summary>
-    public class MidiMessage : ISequencerMessage
+    public abstract class MidiMessage : ISequencerMessage
     {
         #region Private members
 
@@ -58,6 +58,31 @@ namespace MidiLibrary
         {
             get { return runningStatus; }
             set { runningStatus = value; }
+        }
+
+        #endregion
+
+        #region Services
+
+        /// <summary>
+        /// Get the midi message as an array of byte, as they would be sent over a midi cable
+        /// </summary>
+        /// <returns>Midi message as byte array</returns>
+        public abstract byte[] GetAsByteArray();
+
+        /// <summary>
+        /// Get the midi message as an unsigned integer, in the windows short message format
+        /// </summary>
+        /// <returns>Windows format short message, of uint.MaxValue if not supported by the message type</returns>
+        public abstract uint GetAsShortMessage();
+
+        /// <summary>
+        /// Get the first byte of the midi message, as it would appear on the wire
+        /// </summary>
+        /// <returns>First byte of midi message</returns>
+        public byte GetFirstByte()
+        {
+            return (byte)((byte)command | ((channel == 0) ? 0 : channel - 1));
         }
 
         #endregion
