@@ -245,13 +245,13 @@ namespace MidiLibrary.WindowsMultiMedia
         private void MidiProc(IntPtr hMidiIn,
             EMMMidiMessages wMsg,
             IntPtr dwInstance,
-            uint dwParam1,
-            uint dwParam2)
+            IntPtr dwParam1,
+            IntPtr dwParam2)
         {
             if ((callback != null) && (wMsg == EMMMidiMessages.MIM_DATA))
             {
                 // Make a midi event out of the incoming params
-                MidiEvent e = MidiInParser.ParseMimDataMessage(dwParam1, dwParam2);
+                MidiEvent e = MidiInParser.ParseMimDataMessage((uint)dwParam1, (uint)dwParam2);
 
                 // Give it to the user
                 callback(this, new MidiEventArgs(e, dwParam1, dwParam2));
@@ -435,8 +435,8 @@ namespace MidiLibrary.WindowsMultiMedia
                 IntPtr hMidiOut,
                 EMMMidiMessages wMsg,
                 IntPtr dwInstance,
-                uint dwParam1,
-                uint dwParam2);
+                IntPtr dwParam1,
+                IntPtr dwParam2);
 
             [DllImport("winmm.dll")]
             internal static extern uint midiOutGetNumDevs();

@@ -19,10 +19,10 @@ namespace MidiLibrary.WindowsMultiMedia
         private MidiEvent midiEvent;
 
         // When originating from windows, the raw message content dwParam1/dwParam2
-        private uint p1;
-        private uint p2;
+        private IntPtr p1;
+        private IntPtr p2;
 
-        public MidiEventArgs(MidiEvent midiEvent, uint p1, uint p2)
+        public MidiEventArgs(MidiEvent midiEvent, IntPtr p1, IntPtr p2)
         {
             this.midiEvent = midiEvent;
             this.p1 = p1;
@@ -34,12 +34,12 @@ namespace MidiLibrary.WindowsMultiMedia
             get { return midiEvent; }
         }
 
-        public uint P1
+        public IntPtr P1
         {
             get { return p1; }
         }
 
-        public uint P2
+        public IntPtr P2
         {
             get { return p2; }
         }

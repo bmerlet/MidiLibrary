@@ -201,15 +201,15 @@ namespace MidiLibrary.WindowsMultiMedia
         private void MidiProc(IntPtr hMidiIn,
             EMMMidiMessages wMsg,
             IntPtr dwInstance,
-            uint dwParam1,
-            uint dwParam2)
+            IntPtr dwParam1,
+            IntPtr dwParam2)
         {
             if (wMsg == EMMMidiMessages.MIM_DATA)
             {
                 if (MidiInputReceived != null)
                 {
                     // Make a midi event out of the incoming params
-                    MidiEvent e = MidiInParser.ParseMimDataMessage(dwParam1, dwParam2);
+                    MidiEvent e = MidiInParser.ParseMimDataMessage((uint)dwParam1, (uint)dwParam2);
 
                     // Give it to the user
                     MidiInputReceived.Invoke(this, new MidiEventArgs(e, dwParam1, dwParam2));
@@ -218,7 +218,7 @@ namespace MidiLibrary.WindowsMultiMedia
             else if (wMsg == EMMMidiMessages.MIMLONG_DATA)
             {
                 // The first parameter is a pointer to a buffer descriptor
-                var header = (IntPtr)dwParam1;
+                var header = dwParam1;
 
                 // Find this buffer in our buffer set
                 int index = (int)MidiBuffer.GetUserData(header);
@@ -298,7 +298,7 @@ namespace MidiLibrary.WindowsMultiMedia
                         if (sysex != null)
                         {
                             // Make a midi event out of the sysex
-                            var e = new MidiEvent(sysex, dwParam2);
+                            var e = new MidiEvent(sysex, (uint)dwParam2);
 
                             // Give it to the user
                             MidiInputReceived.Invoke(this, new MidiEventArgs(e, dwParam1, dwParam2));
@@ -400,8 +400,8 @@ namespace MidiLibrary.WindowsMultiMedia
                 IntPtr hMidiIn,
                 EMMMidiMessages wMsg,
                 IntPtr dwInstance,
-                uint dwParam1,
-                uint dwParam2);
+                IntPtr dwParam1,
+                IntPtr dwParam2);
 
             [DllImport("winmm.dll")]
             internal static extern uint midiInGetNumDevs();
