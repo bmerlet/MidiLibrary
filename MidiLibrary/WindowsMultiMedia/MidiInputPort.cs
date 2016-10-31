@@ -226,82 +226,86 @@ namespace MidiLibrary.WindowsMultiMedia
                 {
                     throw new InvalidOperationException("midiInputPort: MIMLONG_DATA buffer not found - index " + index);
                 }
+
                 var buffer = buffers[index];
-
-                // Get data from buffer
-                var data = buffer.GetRecordedData();
-                if (data.Length == 0)
+                if (buffer != null)
                 {
-                    // This happens on Reset(), all the buffers are freed by windows and we get a MIMLONG_DATA for each of them.
-                    // Free the buffer.
-                    buffer.RemoveMidiInBuffer(handle);
-                    buffer.Dispose();
-                    buffers[index] = null;
-                }
-                else
-                {
-                    // Give the buffer back to windows, we are done with it
-                    buffer.AddMidiInBuffer(handle);
 
-                    // If we have a callback, either generate a sysex or
-                    // memorize the data if we don't have a full sysex
-                    if (MidiInputReceived != null)
+                    // Get data from buffer
+                    var data = buffer.GetRecordedData();
+                    if (data.Length == 0)
                     {
-                        MidiSysexMessage sysex = null;
+                        // This happens on Reset(), all the buffers are freed by windows and we get a MIMLONG_DATA for each of them.
+                        // Free the buffer.
+                        buffer.RemoveMidiInBuffer(handle);
+                        buffer.Dispose();
+                        buffers[index] = null;
+                    }
+                    else
+                    {
+                        // Give the buffer back to windows, we are done with it
+                        buffer.AddMidiInBuffer(handle);
 
-                        if (data[0] == (byte)EMidiCommand.SystemExclusive)
+                        // If we have a callback, either generate a sysex or
+                        // memorize the data if we don't have a full sysex
+                        if (MidiInputReceived != null)
                         {
-                            // This buffer contains the beginning of the sysex - check we don't have an ongoing sysex
-                            if (this.partialSysex != null)
-                            {
-                                throw new InvalidOperationException("midiInputPort: Beginning of new sysex received while previous one still on-going");
-                            }
+                            MidiSysexMessage sysex = null;
 
-                            if (data[data.Length - 1] == (byte)EMidiCommand.EndOfSystemExclusive)
+                            if (data[0] == (byte)EMidiCommand.SystemExclusive)
                             {
-                                // This buffer contains a full sysex
-                                sysex = new MidiSysexMessage(data);
+                                // This buffer contains the beginning of the sysex - check we don't have an ongoing sysex
+                                if (this.partialSysex != null)
+                                {
+                                    throw new InvalidOperationException("midiInputPort: Beginning of new sysex received while previous one still on-going");
+                                }
+
+                                if (data[data.Length - 1] == (byte)EMidiCommand.EndOfSystemExclusive)
+                                {
+                                    // This buffer contains a full sysex
+                                    sysex = new MidiSysexMessage(data);
+                                }
+                                else
+                                {
+                                    // This buffer contains the beginning of a sysex
+                                    this.partialSysex = data;
+                                }
                             }
                             else
                             {
-                                // This buffer contains the beginning of a sysex
-                                this.partialSysex = data;
-                            }
-                        }
-                        else
-                        {
-                            // This buffer is a continuation of a sysex. Verify we have an ongoing sysex
-                            if (this.partialSysex == null)
-                            {
-                                throw new InvalidOperationException("midiInputPort: Continuation sysex without beginning");
+                                // This buffer is a continuation of a sysex. Verify we have an ongoing sysex
+                                if (this.partialSysex == null)
+                                {
+                                    throw new InvalidOperationException("midiInputPort: Continuation sysex without beginning");
+                                }
+
+                                // Concatenate the partial data and the new data
+                                var dataSoFar = new byte[partialSysex.Length + data.Length];
+                                partialSysex.CopyTo(dataSoFar, 0);
+                                data.CopyTo(dataSoFar, dataSoFar.Length);
+
+                                if (data[data.Length - 1] == (byte)EMidiCommand.EndOfSystemExclusive)
+                                {
+                                    // This buffer concludes the sysex
+                                    sysex = new MidiSysexMessage(dataSoFar);
+                                    this.partialSysex = null;
+                                }
+                                else
+                                {
+                                    // This buffer contains a partial sysex, add it to the partial sysex
+                                    this.partialSysex = dataSoFar;
+                                }
                             }
 
-                            // Concatenate the partial data and the new data
-                            var dataSoFar = new byte[partialSysex.Length + data.Length];
-                            partialSysex.CopyTo(dataSoFar, 0);
-                            data.CopyTo(dataSoFar, dataSoFar.Length);
-
-                            if (data[data.Length - 1] == (byte)EMidiCommand.EndOfSystemExclusive)
+                            // Create sysex event if we have a sysex
+                            if (sysex != null)
                             {
-                                // This buffer concludes the sysex
-                                sysex = new MidiSysexMessage(dataSoFar);
-                                this.partialSysex = null;
-                            }
-                            else
-                            {
-                                // This buffer contains a partial sysex, add it to the partial sysex
-                                this.partialSysex = dataSoFar;
-                            }
-                        }
- 
-                        // Create sysex event if we have a sysex
-                        if (sysex != null)
-                        {
-                            // Make a midi event out of the sysex
-                            var e = new MidiEvent(sysex, (uint)dwParam2);
+                                // Make a midi event out of the sysex
+                                var e = new MidiEvent(sysex, (uint)dwParam2);
 
-                            // Give it to the user
-                            MidiInputReceived.Invoke(this, new MidiEventArgs(e, dwParam1, dwParam2));
+                                // Give it to the user
+                                MidiInputReceived.Invoke(this, new MidiEventArgs(e, dwParam1, dwParam2));
+                            }
                         }
                     }
                 }
