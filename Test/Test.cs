@@ -96,6 +96,7 @@ namespace Test
             Console.WriteLine("=== Test midi in-out via LoopBe");
 
             var inPorts = MidiInputPort.GetAllPorts();
+
             var loopIn = inPorts.First(p => p.Name.StartsWith("LoopBe"));
             if (loopIn == null)
             {

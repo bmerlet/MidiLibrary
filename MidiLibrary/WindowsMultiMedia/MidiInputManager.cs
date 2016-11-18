@@ -34,8 +34,39 @@ namespace MidiLibrary.WindowsMultiMedia
 
         #region Events
 
-        // Event raised when one of the opened ports receives midi data
-        public event MidiMessageHandler midiInput = null;
+        // Event raised when ports are opened or closed and supporting event arg class
+        public event EventHandler<OpenPortsChangedEventArgs> OpenPortsChanged;
+
+        public class OpenPortsChangedEventArgs : EventArgs
+        {
+            public OpenPortsChangedEventArgs(int openPortCount)
+            {
+                OpenPortCount = openPortCount;
+            }
+
+            public int OpenPortCount
+            {
+                get;
+                private set;
+            }
+        }
+
+        // Event raised when one of the opened ports receives midi data and event arg supporting class
+        public event EventHandler<MidiInputEventArgs> midiInput = null;
+
+        public class MidiInputEventArgs : EventArgs
+        {
+            public MidiInputEventArgs(MidiMessage message)
+            {
+                Message = message;
+            }
+
+            public MidiMessage Message
+            {
+                get;
+                private set;
+            }
+        }
 
         #endregion
 
@@ -46,6 +77,8 @@ namespace MidiLibrary.WindowsMultiMedia
         // ports to open changes.
         public void Manage(StringCollection namesOfportsToOpen)
         {
+            bool portsChanged = false;
+
             // Safety
             if (namesOfportsToOpen == null)
             {
@@ -65,12 +98,14 @@ namespace MidiLibrary.WindowsMultiMedia
                     // This port does not belong to the list of ports to open - close it
                     Console.WriteLine("MidiInputManager: Closing Midi In port " + port.Id + ": " + port.Name + " because it is not on the list of ports to open");
                     port.Close();
+                    portsChanged = true;
                 }
                 else if (currentPorts.Find(p => p.Name == port.Name) == null)
                 {
                     // This port is disconnected - close it
                     Console.WriteLine("MidiInputManager: Closing Midi In port " + port.Id + ": " + port.Name + " because it is disconnected");
                     port.Close();
+                    portsChanged = true;
                 }
                 else
                 {
@@ -90,14 +125,26 @@ namespace MidiLibrary.WindowsMultiMedia
                     {
                         // Port not open. We need to open it
                         port.MidiInputReceived += MidiInCallback;
-                        if (port.Open() == MidiLibrary.EMMError.NOERROR)
+                        var error = port.Open();
+                        if (error == MidiLibrary.EMMError.NOERROR)
                         {
                             Console.WriteLine("MidiInputManager: Opened Midi In port {0}: {1}", port.Id, port.Name);
                             port.Start();
                             openedPorts.Add(port);
+                            portsChanged = true;
+                        }
+                        else
+                        {
+                            Console.WriteLine("MidiInputManager: Failed to open Midi In port {0}: {1} - {2}", port.Id, port.Name, error);
                         }
                     }
                 }
+            }
+
+            if (portsChanged && OpenPortsChanged != null)
+            {
+                Console.WriteLine("MidiInputManager: Raising OpenedPortsChanged event");
+                OpenPortsChanged.Invoke(this, new OpenPortsChangedEventArgs(openedPorts.Count));
             }
         }
 
@@ -106,7 +153,7 @@ namespace MidiLibrary.WindowsMultiMedia
         {
             if (midiInput != null && e.MidiEvent.Message != null)
             {
-                midiInput.Invoke(e.MidiEvent.Message);
+                midiInput.Invoke(this, new MidiInputEventArgs(e.MidiEvent.Message));
             }
         }
 

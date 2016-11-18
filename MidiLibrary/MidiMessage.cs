@@ -7,9 +7,6 @@ using MidiLibrary.Sequencer;
 
 namespace MidiLibrary
 {
-    // Generic delegate to handle a midi message
-    public delegate void MidiMessageHandler(MidiMessage midiMessage);
-
     /// <summary>
     /// MidiMessage: Base class for all midi messages
     /// </summary>
