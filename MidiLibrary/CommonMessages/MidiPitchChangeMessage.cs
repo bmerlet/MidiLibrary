@@ -25,6 +25,12 @@ namespace MidiLibrary.CommonMessages
             this.pitch = (int)rawChangeAmount - 0x2000;
         }
 
+        public MidiPitchChangeMessage(uint channel, int changeAmount)
+            : base(EMidiCommand.PitchWheelChange, channel)
+        {
+            this.pitch = changeAmount;
+        }
+
         #endregion
 
         #region Properties
@@ -32,6 +38,11 @@ namespace MidiLibrary.CommonMessages
         public int Pitch
         {
             get { return pitch; }
+        }
+
+        public uint RawPitchValue
+        {
+            get { return (uint)(pitch + 0x2000); }
         }
 
         #endregion
