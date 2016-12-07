@@ -82,6 +82,8 @@ namespace MidiLibrary
         Chorus = 93,
         Detune = 94,
         Phaser = 95,
+        DataIncrement = 96,
+        DataDecrement = 97,
 
         // Registered and Non-registered Parameter numbers
         // Note on usage:
@@ -92,8 +94,10 @@ namespace MidiLibrary
         RpnLSB = 100,
         RpnMSB = 101,
 
-        // Channel mode (122-127)
+        AllSoundOff = 120,
         ResetAllControllers = 121,
+
+        // Channel mode (122-127)
         LocalControl = 122,
         AllNotesOff = 123,
         OmniModeOff = 124, // On: Omni mode off, Off: All notes off 

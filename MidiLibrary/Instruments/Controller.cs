@@ -57,6 +57,11 @@ namespace MidiLibrary.Instruments
             get { return number; }
         }
 
+        public bool IsSwitch
+        {
+            get { return number >= 64 && number <= 69; }
+        }
+
         #endregion
 
         #region Services
