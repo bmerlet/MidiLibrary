@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Fragment>
+
+    <!-- Create a reference to the install directory of the master product  -->
+    <DirectoryRef Id="INSTALLFOLDER" />
+
+    <!-- Install the Midi library DLL  -->
+    <ComponentGroup Id="MidiLibraryGroup" Directory="INSTALLFOLDER">
+      <Component Id="MidiLibrary">
+        <File Source="$(var.MidiLibrary.TargetPath)" />
+      </Component>
+    </ComponentGroup>
+
+    <!-- Define feature name (to be referenced by the master product installer)  -->
+    <Feature Id="MidiLibrary">
+      <ComponentGroupRef Id="MidiLibraryGroup" />
+    </Feature>
+    
+  </Fragment>
+</Wix>
