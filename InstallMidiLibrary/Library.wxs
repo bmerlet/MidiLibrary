@@ -8,7 +8,7 @@
     <!-- Install the Midi library DLL  -->
     <ComponentGroup Id="MidiLibraryGroup" Directory="INSTALLFOLDER">
       <Component Id="MidiLibrary">
-        <File Source="$(var.MidiLibrary.TargetPath)" />
+        <File Source="$(var.MidiLibrary.TargetPath)"  KeyPath="yes"/>
       </Component>
     </ComponentGroup>
 
