@@ -178,6 +178,15 @@ namespace MidiLibrary
     };
 
     /// <summary>
+    /// How an instrument handles overlap of the same note on the same channel
+    /// </summary>
+    public enum EOverlapSupport
+    {
+        None = 0,                   // Not supported
+        OneNoteOffPerNoteOn = 1,    // Supported
+    };
+
+    /// <summary>
     /// Windows multi-media Midi messages
     /// </summary>
     internal enum EMMMidiMessages : uint

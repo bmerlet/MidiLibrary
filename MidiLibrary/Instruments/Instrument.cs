@@ -23,6 +23,9 @@ namespace MidiLibrary.Instruments
         // How to select patches
         private EPatchSelectionMethod patchSelectionMethod;
 
+        // Overlap support
+        EOverlapSupport overlapSupport;
+
         // All banks
         private List<Bank> banks;
 
@@ -42,10 +45,11 @@ namespace MidiLibrary.Instruments
 
         #region Constructor
 
-        public Instrument(string name, EPatchSelectionMethod patchSelectionMethod)
+        public Instrument(string name, EPatchSelectionMethod patchSelectionMethod, EOverlapSupport overlapSupport)
         {
             this.name = name;
             this.patchSelectionMethod = patchSelectionMethod;
+            this.overlapSupport = overlapSupport;
             this.banks = new List<Bank>();
             this.controllers = new List<Controller>();
             this.rpns = new List<ProgramNumber>();
@@ -65,6 +69,11 @@ namespace MidiLibrary.Instruments
         public EPatchSelectionMethod PatchSelectionMethod
         {
             get { return patchSelectionMethod; }
+        }
+
+        public EOverlapSupport OverlapSupport
+        {
+            get { return overlapSupport; }
         }
 
         public List<Bank> Banks
