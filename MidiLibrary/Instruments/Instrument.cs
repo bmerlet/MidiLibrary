@@ -15,91 +15,55 @@ namespace MidiLibrary.Instruments
     /// </summary>
     public class Instrument
     {
-        #region Private members
-
-        // Name of this instrument
-        private string name;
-
-        // How to select patches
-        private EPatchSelectionMethod patchSelectionMethod;
-
-        // Overlap support
-        EOverlapSupport overlapSupport;
-
-        // All banks
-        private List<Bank> banks;
-
-        // All controllers
-        private List<Controller> controllers;
-
-        // All RPNs
-        private List<ProgramNumber> rpns;
-
-        // All NRPNs
-        private List<ProgramNumber> nrpns;
-
-        // All sequence groups
-        private List<SequenceGroup> sequenceGroups;
-
-        #endregion
-
         #region Constructor
 
-        public Instrument(string name, EPatchSelectionMethod patchSelectionMethod, EOverlapSupport overlapSupport)
+        public Instrument(string name, EPatchSelectionMethod patchSelectionMethod, EOverlapSupport overlapSupport, bool supportsChannelAfterTouch, bool supportsPitchBend)
         {
-            this.name = name;
-            this.patchSelectionMethod = patchSelectionMethod;
-            this.overlapSupport = overlapSupport;
-            this.banks = new List<Bank>();
-            this.controllers = new List<Controller>();
-            this.rpns = new List<ProgramNumber>();
-            this.nrpns = new List<ProgramNumber>();
-            this.sequenceGroups = new List<SequenceGroup>();
+            this.Name = name;
+            this.PatchSelectionMethod = patchSelectionMethod;
+            this.SupportsChannelAfterTouch = supportsChannelAfterTouch;
+            this.SupportsPitchBend = supportsPitchBend;
+            this.OverlapSupport = overlapSupport;
+            this.Banks = new List<Bank>();
+            this.Controllers = new List<Controller>();
+            this.RPNs = new List<ProgramNumber>();
+            this.NRPNs = new List<ProgramNumber>();
+            this.SequenceGroups = new List<SequenceGroup>();
         }
 
         #endregion
 
         #region Properties
 
-        public string Name
-        {
-            get { return name; }
-        }
+        // Name of this instrument
+        public readonly string Name;
 
-        public EPatchSelectionMethod PatchSelectionMethod
-        {
-            get { return patchSelectionMethod; }
-        }
+        // How to select patches
+        public readonly EPatchSelectionMethod PatchSelectionMethod;
 
-        public EOverlapSupport OverlapSupport
-        {
-            get { return overlapSupport; }
-        }
+        // Overlap support
+        public readonly EOverlapSupport OverlapSupport;
 
-        public List<Bank> Banks
-        {
-            get { return banks; }
-        }
+        // If supports channel after touch
+        public readonly bool SupportsChannelAfterTouch;
 
-        public List<Controller> Controllers
-        {
-            get { return controllers; }
-        }
+        // If supports pitch bend
+        public readonly bool SupportsPitchBend;
 
-        public List<ProgramNumber> RPNs
-        {
-            get { return rpns; }
-        }
+        // All banks
+        public readonly List<Bank> Banks;
 
-        public List<ProgramNumber> NRPNs
-        {
-            get { return nrpns; }
-        }
+        // All controllers
+        public readonly List<Controller> Controllers;
 
-        public List<SequenceGroup> SequenceGroups
-        {
-            get { return sequenceGroups; }
-        }
+        // All RPNs
+        public readonly List<ProgramNumber> RPNs;
+
+        // All NRPNs
+        public readonly List<ProgramNumber> NRPNs;
+
+        // All sequence groups
+        public readonly List<SequenceGroup> SequenceGroups;
 
         #endregion
     }

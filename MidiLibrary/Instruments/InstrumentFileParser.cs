@@ -197,6 +197,9 @@ namespace MidiLibrary.Instruments
                 // First pass over the attributes to retreive the bank select method and which banks are drum
                 var patchSelMethod = EPatchSelectionMethod.Normal;
                 var overlapSupport = EOverlapSupport.None;
+                bool supportsPitchBend = false;
+                bool supportsAfterTouch = false;
+
                 foreach (var kvp in instrumentItem.Values)
                 {
                     if (kvp.Key == "BankSelMethod")
@@ -206,6 +209,14 @@ namespace MidiLibrary.Instruments
                     else if (kvp.Key == "OverlapSupport")
                     {
                         overlapSupport = (EOverlapSupport)int.Parse(kvp.Value);
+                    }
+                    else if (kvp.Key == "SupportsPitchBend")
+                    {
+                        supportsPitchBend = int.Parse(kvp.Value) != 0;
+                    }
+                    else if (kvp.Key == "SupportsAfterTouch")
+                    {
+                        supportsPitchBend = int.Parse(kvp.Value) != 0;
                     }
                     else if (kvp.Key.StartsWith("Drum[") && kvp.Value == "1")
                     {
@@ -219,7 +230,7 @@ namespace MidiLibrary.Instruments
                 }
 
                 // Create the instrument
-                var instrument = new Instrument(instrumentItem.Name, patchSelMethod, overlapSupport);
+                var instrument = new Instrument(instrumentItem.Name, patchSelMethod, overlapSupport, supportsAfterTouch, supportsPitchBend);
 
                 // Populate it based on the name/value entries
                 foreach (var kv in instrumentItem.Values)
