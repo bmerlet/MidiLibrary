@@ -306,6 +306,8 @@ namespace MidiLibrary.Instruments
                             break;
                         case "BankSelMethod":
                         case "OverlapSupport":
+                        case "SupportsPitchBend":
+                        case "SupportsAfterTouch":
                             // Already processed above
                             break;
                         default:
