@@ -216,7 +216,7 @@ namespace MidiLibrary.Instruments
                     }
                     else if (kvp.Key == "SupportsAfterTouch")
                     {
-                        supportsPitchBend = int.Parse(kvp.Value) != 0;
+                        supportsAfterTouch = int.Parse(kvp.Value) != 0;
                     }
                     else if (kvp.Key.StartsWith("Drum[") && kvp.Value == "1")
                     {
