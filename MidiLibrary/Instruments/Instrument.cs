@@ -17,13 +17,14 @@ namespace MidiLibrary.Instruments
     {
         #region Constructor
 
-        public Instrument(string name, EPatchSelectionMethod patchSelectionMethod, EOverlapSupport overlapSupport, bool supportsChannelAfterTouch, bool supportsPitchBend)
+        public Instrument(string name, EPatchSelectionMethod patchSelectionMethod, EOverlapSupport overlapSupport, bool supportsChannelAfterTouch, bool supportsPitchBend, string vstiName)
         {
             this.Name = name;
             this.PatchSelectionMethod = patchSelectionMethod;
             this.SupportsChannelAfterTouch = supportsChannelAfterTouch;
             this.SupportsPitchBend = supportsPitchBend;
             this.OverlapSupport = overlapSupport;
+            this.VstiName = vstiName;
             this.Banks = new List<Bank>();
             this.Controllers = new List<Controller>();
             this.RPNs = new List<ProgramNumber>();
@@ -49,6 +50,9 @@ namespace MidiLibrary.Instruments
 
         // If supports pitch bend
         public readonly bool SupportsPitchBend;
+
+        // If this instrument is for a specific VSTI, name of the VSTI. Null otherwise.
+        public readonly string VstiName;
 
         // All banks
         public readonly List<Bank> Banks;

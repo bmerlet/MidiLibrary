@@ -1,0 +1,916 @@
+; ----------------------------------------------------------------------
+; Descripion of the Yamaha S-YXG50 VSTI
+;
+; Note: The S-YXG50 exports no program and no parameter through VST,
+;       which explains the need for this file.
+
+
+.Patch Names
+
+;
+; Bank 000/000: Standard GM
+;
+
+[S-YXG50 GM]
+0=Grand Piano
+1=Brite Piano
+2=Electric Grand Piano
+3=Honkytonk
+4=Electric Piano 1
+5=Electric Piano 2
+6=Harpsicord
+7=Clavinet
+8=Celesta
+9=Glockenspiel
+10=Music Box
+11=Vibraphone
+12=Marimba
+13=Xylophone
+14=Tubular Bells
+15=Dulcimer
+16=Draw Organ
+17=Perc Organ
+18=Rock Organ
+19=Church Organ
+20=Reed Organ
+21=Accordion
+22=Harmonica
+23=Tango Accordion
+24=Nylon Guitar
+25=Steel Guitar
+26=Jazz Guitar
+27=Clean Guitar
+28=Mute Guitar
+29=Overdriven Guitar
+30=Distortion Guitar
+31=Harmonics Guitar
+32=Acoustic Bass
+33=Finger Bass
+34=Pick Bass
+35=Fretless Bass
+36=Slap Bass 1
+37=Slap Bass 2
+38=Synth Bass 1
+39=Synth Bass 2
+40=Violin
+41=Viola
+42=Cello
+43=Contrabass
+44=Tremolo Strings
+45=Pizzicato Strings
+46=Harp
+47=Timpani
+48=Strings 1
+49=Strings 2
+50=Synth Strings 1
+51=Synth Strings 2
+52=Aah Choir
+53=Ooh Choir
+54=Synth Voice
+55=Orchestral Hit
+56=Trumpet
+57=Trombone
+58=Tuba
+59=Mute Trumpet
+60=French Horn
+61=Brass Section
+62=Synth Brass 1
+63=Synth Brass 2
+64=Soprano Sax
+65=Alto Sax
+66=Tenor Sax
+67=Baritone Sax
+68=Oboe
+69=English Horn
+70=Bassoon
+71=Clarinet
+72=Piccolo
+73=Flute
+74=Recorder
+75=Panflute
+76=Blown Bottle
+77=Shakuhachi
+78=Whistle
+79=Ocarina
+80=Square Lead
+81=Saw Lead
+82=Caliope Lead
+83=Chiff Lead
+84=Charan Lead
+85=Voice Lead
+86=Fifth Lead
+87=Bass & Lead
+88=New Age Pad
+89=Warm Pad
+90=Poly Synth Pad
+91=Choir Pad
+92=Bowed Pad
+93=Metal Pad
+94=Halo Pad
+95=Sweep Pad
+96=Rain
+97=SoundTrack
+98=Crystal
+99=Atmosphere
+100=Brightness
+101=Goblins
+102=Echoes
+103=Sci-Fi
+104=Sitar
+105=Banjo
+106=Shamisen
+107=Koto
+108=Kalimba
+109=Bagpipe
+110=Fiddle
+111=Shanai
+112=Tinkle Bell
+113=Agogo
+114=Steel Drum
+115=Woodblock
+116=Taikodrum
+117=Melodic Tom
+118=Synth Drum
+119=Reverse Cymbal
+120=Fret Noise
+121=Breath Noise
+122=Seashore
+123=Tweet
+124=Telephone
+125=Helicopter
+126=Applause
+127=Gunshot
+
+;
+; Bank 000/001: KSP (Keyboard Scale Panning)
+;
+
+[S-YXG50 KSP]
+0=Grand Piano KSP
+1=Brite Piano KSP
+2=Electric Grand Piano KSP
+3=Honkytonk KSP
+4=Electric Piano 1 KSP
+5=Electric Piano 2 KSP
+6=Harpsicord KSP
+7=Clavinet KSP
+11=Vibraphone KSP
+12=Marimba KSP
+
+;
+; Bank 000/003: Stereo
+;
+
+[S-YXG50 Stereo]
+48=Stereo Strings 1
+49=Stereo Strings 2
+52=Stereo Aah Choir
+
+;
+; Bank 000/006: Solo
+;
+
+[S-YXG50 Solo]
+39=Mellow Synth Bass
+60=French Horn Solo
+80=Square Lead 2
+81=Saw Lead 2
+
+;
+; Bank 000/008: Slow
+;
+
+[S-YXG50 Slow]
+40=Slow Violin
+44=Slow Tremolo Strings
+48=Slow Strings
+49=Legato Strings
+80=LM Square Lead
+81=Thick Saw Lead
+102=Echoes 2
+
+;
+; Bank 000/012: Fast Decay
+;
+
+[S-YXG50 Fast Decay]
+39=Seq Bass
+62=Quack Brass
+98=Synth Drum Comp
+
+;
+; Bank 000/014: Double Attack
+;
+
+[S-YXG50 Double Attack]
+98=Popcorn
+102=Echo Pan
+
+;
+; Bank 000/016: Bright 1
+;
+
+[S-YXG50 Bright 1]
+24=Nylon Guitar 2
+25=Steel Guitar 2
+52=Aah Choir 2
+56=Trumpet 2
+58=Tuba 2
+87=Big & Low
+89=Thick Pad
+
+;
+; Bank 000/017: Bright 2
+;
+
+[S-YXG50 Bright 2]
+56=Bright Trumpet
+89=Soft Pad
+
+;
+; Bank 000/018: Dark 1
+;
+
+[S-YXG50 Dark 1]
+0=Mellow Grand Piano
+4=Mellow Electric Piano
+26=Mellow Jazz Guitar
+33=Dark Finger Bass
+38=Dark Synth Bass
+39=Click Synth Bass
+57=Trombone 2
+58=Tuba 2
+63=Soft Brass
+80=Hollow Lead
+81=Dynamic Saw Lead
+89=Sine Pad
+98=Tiny Bell
+99=Warm Atmosphere
+
+;
+; Bank 000/019: Dark 2
+;
+
+[S-YXG50 Dark 2]
+80=Shmoog Lead
+81=Digital Saw Lead
+99=Hollw Release
+
+;
+; Bank 000/020: Resonant
+;
+
+[S-YXG50 Resonant]
+38=Fast Res Bass
+62=Rez Synth Brass
+81=Big Lead
+95=Shwimmer
+
+;
+; Bank 000/024: Attack
+;
+
+[S-YXG50 Attack]
+17=70s Perc Organ
+38=Acid Bass
+48=Arco Strings
+62=Poly Brass
+81=Heavy Synth Lead
+85=Synth Aah
+
+;
+; Bank 000/025: Release
+;
+
+[S-YXG50 Release]
+24=Nylon Guitar 3
+
+;
+; Bank 000/027: Rezo Sweep
+;
+
+[S-YXG50 Rezo Sweep]
+7=Clavinet Wah
+33=Flange Bass
+36=Reso Slap Bass
+50=Reso Strings
+62=Synth Brass 3
+95=Converge Pad 
+97=Prologue
+
+;
+; Bank 000/028: Mute
+;
+
+[S-YXG50 Mute]
+34=Mute Pick Bass
+105=Mute Banjo
+
+;
+; Bank 000/032: Chorus 1
+;
+
+[S-YXG50 Chorus 1]
+2=Detuned CP80
+4=Chorus Electric Piano 1
+5=Chorus Electric Piano 2
+16=Detuned Draw Organ
+17=Detuned Perc Organ
+19=Church Organ 3
+21=Accordit
+22=Harmonica 2
+26=Jazz Amp Guitar
+27=Chorus Guitar
+35=Fretless Bass 2
+36=Punch Thumb Bass
+39=Smooth Bass 2
+52=Mellow Choir
+56=Warm Trumpet
+60=French Horn 2
+62=Jamp Brass
+104=Detuned Sitar
+
+;
+; Bank 000/033: Chorus 2
+;
+
+[S-YXG50 Chorus 2]
+5=DX Hard
+16=60s Draw Organ 1
+17=Lite Organ
+35=Fretless Bass 3
+
+;
+; Bank 000/034: Chorus 3
+;
+
+[S-YXG50 Chorus 3]
+5=DX Legend
+16=60s Draw Organ 2
+35=Fretless Bass 4
+
+;
+; Bank 000/035: Octave Layered 1
+;
+
+[S-YXG50 Octave Layered 1]
+6=Harpsicord 3
+15=Dulcimer 2
+16=70s Draw Organ 2
+19=Church Organ 2
+25=12 Strings Guitar
+38=Clavi Bass
+48=60s Strings
+55=Orchestral Hit 2
+61=Trumpet & Tuba Section
+86=Big Five Lead
+87=Bass & Lead
+98=Round Clockenspiel
+104=Sitar 2
+
+;
+; Bank 000/036: Octave Layered 2
+;
+
+[S-YXG50 Octave Layered 2]
+16=Draw Organ 2
+
+;
+; Bank 000/037: 5th Layered 1
+;
+
+[S-YXG50 5th Layered 1]
+16=60s Draw Organ 3
+17=Perc Organ 2
+60=Horn Orchestra
+
+;
+; Bank 000/038: 5th Layered 2
+;
+
+[S-YXG50 5th Layered 2]
+16=60s Even Bar Organ
+
+;
+; Bank 000/040: Tutti 1
+;
+
+[S-YXG50 Tutti 1]
+0=Piano & Strings
+2=Electric Grand Piano 2
+4=Hard Electric Piano
+5=DX Phase
+16=16+2"2/3
+19=Notre Dame Organ
+20=Puff Organ
+25=Nylon & Steel Guitar
+28=Funk Guitar 1
+30=Feedback Guitar 1
+32=Jazz Rythm Bass
+33=Bass & Dist EG
+38=Techno Bass
+39=Modular Synth Bass
+44=Suspense Strings
+46=Yang Chin
+48=Orchestra 1
+49=Warm Strings
+52=Choir & Strings
+54=Synth Voice 2
+61=Brass Section 2
+63=Synth Brass 4
+65=Sax Section
+66=Breathy Tenor Sax
+81=Pulse Saw Lead
+98=GlockenChime
+99=Nylon El Piano
+
+;
+; Bank 000/041: Tutti 2
+;
+
+[S-YXG50 Tutti 2]
+0=Dream Piano
+2=Electric Grand Piano 3
+4=Hard Electric Piano
+5=DX+Analog EP
+25=Steel & Body Guitar
+28=Mute Steel Guitar
+30=Feedback Guitar 2
+32=Jazz Rythm Bass
+39=DX Bass
+48=Orchestra 2
+49=Warm Strings
+52=Kingdom
+54=Choral
+61=High Brass
+63=Choir & Brass
+66=Soft Tenor Sax
+81=Dr. Lead
+98=Clear Bells
+
+;
+; Bank 000/042: Tutti 3
+;
+
+[S-YXG50 Tutti 3]
+5=DX Koto EP
+48=Tremolo Orchestra
+61=Mellow Brass
+63=Choir & Brass
+98=Chorus Bells
+
+;
+; Bank 000/043: Velocity Switch
+;
+
+[S-YXG50 VeloSw]
+24=Velo Guitar Harmo
+28=Funk Guitar 2
+29=Guitar Pinch
+33=Finger Slap Bass
+37=Velo Sw Slap Bass
+65=Hyper Alto Sax
+
+;
+; Bank 000/045: Velocity X-fade
+;
+
+[S-YXG50 VeloFade]
+4=VX Electric Piano 1
+5=VX Electric Piano 2
+11=Hard Vibraphone
+28=Jazzman Guitar
+32=VX Upright Bass
+33=Finger Bass 2
+48=Velo Strings
+62=Analog Velo Brass
+63=Velo Brass 2
+81=Velo Lead
+96=Clavi Pad
+
+;
+; Bank 000/064: Alternates 1
+;
+
+[S-YXG50 Alt 1]
+4=60s Electric Piano
+7=Pulse Clavinet
+10=Orgel
+11=Vibraphone
+12=Sine Marimba
+16=Organ Bass
+18=Rotary Organ
+19=Organ Flute
+23=Tango Accordion 2
+38=Oscar Bass
+39=X Wire Bass
+49=70s Strings
+50=Synth Strings 4
+54=Analog Voice
+55=Impact
+62=Analog Brass 1
+63=Analog Brass 2
+66=Tenor Sax 2
+80=Mellow Lead
+83=Rubby Lead
+84=Distorted Lead
+85=Vox Lead
+87=Fat & Perky Lead
+88=Fantasy 2 Pad
+89=Horn Pad
+90=Poly Pad 80
+91=Heaven Pad 2
+92=Glacier Pad
+93=Tine Pad
+95=Polar Pad
+96=Harmo Rain
+97=Ancestral
+98=Synth Malet
+99=Nylon Harp
+100=Fantasy Bell
+101=Goblins Synth
+102=Echo Bell
+103=Starz
+111=Shanai 2
+117=Melodic Tom 2
+118=Analog Tom
+
+;
+; Bank 000/065: Alternates 2
+;
+
+[S-YXG50 Alt 2]
+7=Pierce Clavinet
+16=70s Draw Organ 2
+18=Slow Rotary Organ
+19=Tremolo Organ Flute
+31=Guitar Feedback
+33=Mod Alem Bass
+38=Square Bass
+49=String Ensemble 3
+50=SS Strings
+80=Solo Sine Lead
+82=Pure Lead
+84=Wire Lead
+87=Soft Whirl Lead
+89=Rotary Strings Pad
+90=Click Pad
+92=Glass Pad
+93=Pan Pad
+96=African Wind
+98=Soft Crystal
+99=Harp Vox
+101=50s Sci-Fi
+102=Big Pan
+111=Shanai 2
+117=Real Tom
+118=Electro Perc
+
+;
+; Bank 000/066: Alternates 3
+;
+
+[S-YXG50 Alt 3]
+16=Cheezy Organ
+18=Fast Rotary Organ
+19=Tremolo Organ Flute
+31=Guitar Harmonics 2
+38=Rubber Bass
+80=Sine Lead
+90=Analog Pad
+91=Itopia Pad
+95=Celestial Pad
+96=Caribean
+98=Loud Glocken
+99=Atmosphere Pad
+101=Ring Pad
+102=Synth Piano
+117=Rock Tom
+
+;
+; Bank 000/067: Alternates 4
+;
+
+[S-YXG50 Alt 4]
+16=Draw Organ 3
+90=Square Pad
+91=CC Pad
+98=Xmas Bells
+99=Planet
+101=Ritual
+102=Creation
+
+;
+; Bank 000/068: Alternates 5
+;
+
+[S-YXG50 Alt 5]
+98=Vibe Bells
+101=To Heaven
+102=StartDust
+
+;
+; Bank 000/069: Alternates 6
+;
+
+[S-YXG50 Alt 6]
+98=Digital Bells
+102=Reso Pan
+
+;
+; Bank 000/070: Alternates 7
+;
+
+[S-YXG50 Alt 7]
+98=Air Bells
+101=Night
+
+;
+; Bank 000/071: Alternates 8
+;
+
+[S-YXG50 Alt 8]
+98=Bell Harp
+101=Glisten
+
+;
+; Bank 000/072: Alternates 9
+;
+
+[S-YXG50 Alt 9]
+98=Gamelimba
+
+;
+; Bank 000/096: Related 1
+;
+
+[S-YXG50 Related 1]
+14=Church Bells
+15=Cimbalom
+24=Ukulele
+25=Mandolin
+35=Synth Fretless Bass
+38=Hammer Bass
+81=Seq Analog Lead
+100=Smokey
+101=Bell Choir
+104=Tambra
+105=Rabab
+107=Taisho-kin
+111=Pungi
+112=Bonang
+113=Agogo
+115=Castanets
+116=Gran Casa
+
+;
+; Bank 000/097: Related 2
+;
+
+[S-YXG50 Related 2]
+12=Balimba
+14=Carillon
+15=Santur
+35=Smooth Bass
+104=Tamboura
+105=Gopichant
+107=Kanoon
+111=Hichriki
+112=Gender
+114=Glass Perc
+
+;
+; Bank 000/098: Related 3
+;
+
+[S-YXG50 Related 3]
+12=Log Drums
+105=Oud
+112=Gamelan Gongs
+114=Thai Bells
+
+;
+; Bank 000/099: Related 4
+;
+
+[S-YXG50 Related 4]
+112=Stereo Gamelan Gongs
+
+;
+; Bank 000/100: Related 5
+;
+
+[S-YXG50 Related 5]
+112=Rama Cymbal
+
+;
+; Bank 000/101: Related 6
+;
+
+[S-YXG50 Related 6]
+112=Asian Bells
+
+;
+; Bank 064/000: SFX Voices
+;
+
+[S-YXG50 SFX Voices]
+0=Cutting Noise 1
+1=Cutting Noise 2
+3=String Slap
+16=Flat Key Click
+32=Rain	Shower
+33=Thunder
+34=Wind
+35=Stream
+36=Bubble
+37=Feed
+48=Dog
+49=Horse
+50=Bird Tweet 2
+54=Ghost
+55=Maou
+64=Dial	Tone
+65=Door Squeak
+66=Door Slam
+67=Scratch
+68=Scratch 2
+69=Wind Chime
+70=Telephone 2
+80=Car Engine
+81=Car Breaking
+82=Car Passing
+83=Car Crash
+84=Siren
+85=Train
+86=Jet Plane
+87=Starship
+88=Burst
+89=Roller Coaster
+90=Submarine
+96=Laugh
+97=Scream
+98=Punch
+99=Heartbeat
+100=Footsteps
+112=Machine Gun
+113=Laser Gun
+114=Explosion
+115=Fireworks
+
+;
+; Bank 127/000: Drum kits
+;
+[S-YXG50 Drums]
+0=Standard Kit 1
+1=Standard Kit 2
+8=Room Kit
+16=Rock Kit
+24=Electro Kit
+25=Analog Kit
+32=JazzKit
+40=Brush Kit
+48=Symphony Kit
+
+; ----------------------------------------------------------------------
+; Controllers
+; ----------------------------------------------------------------------
+
+.Controller Names
+
+
+[S-YXG50 Controllers]
+0=0 Bank Select MSB
+1=1 Modulation
+5=5 Portamento Time
+6=6 Data Entry MSB
+7=7 Main Volume
+10=10 Pan
+11=11 Expression
+32=32 Bank Select LSB
+38=38 Data Entry LSB
+64=64 Sustain
+65=65 Portamento
+66=66 Sostenuto
+71=71 Harmonic Content
+72=72-Release Time
+73=73-Attack Time
+74=74-Brightness
+75=75-Decay Time
+91=91 Reverb Send Level
+93=93 Chorus Send Level
+96=96 Data Increment
+97=97 Data Decrement
+98=98 NRPN LSB
+99=99 NRPN MSB
+100=100 RPN LSB
+101=101 RPN MSB
+120=120 All Sound Off
+121=121 Reset All Controllers
+123=123 All Notes Off
+124=124 OMNI Off
+125=125 OMNI On
+126=126 Mono
+127=127 Poly
+
+; ----------------------------------------------------------------------
+; Registered program numbers
+; ----------------------------------------------------------------------
+
+.RPN Names
+
+[Standard]
+0=Pitch Bend Sensitivity
+1=Fine Tune
+2=Coarse Tune
+16383=Reset RPN
+
+; ----------------------------------------------------------------------
+; Midi-library specific extension: Define commonly used sequences
+; ----------------------------------------------------------------------
+
+.Sequences
+
+; [Master Note Shift]
+; Standard=F0 43 11 7F 00 00 00 01 40 F7
+; One Semitone Lower=F0 43 11 7F 00 00 00 01 3F F7
+; One Semitone Higher=F0 43 11 7F 00 00 00 01 41 F7
+
+
+
+; ----------------------------------------------------------------------
+
+.Instrument Definitions
+
+[S-YXG50]
+RPN=Standard
+Control=S-YXG50 Controllers
+
+; Sequence[2]=Master Note Shift
+
+Patch[0]=S-YXG50 GM
+Patch[1]=S-YXG50 KSP
+Patch[3]=S-YXG50 Stereo
+Patch[6]=S-YXG50 Solo
+Patch[8]=S-YXG50 Slow
+Patch[12]=S-YXG50 Fast Decay
+Patch[14]=S-YXG50 Double Attack
+Patch[16]=S-YXG50 Bright 1
+Patch[17]=S-YXG50 Bright 2
+Patch[18]=S-YXG50 Dark 1
+Patch[19]=S-YXG50 Dark 2
+Patch[20]=S-YXG50 Resonant
+Patch[24]=S-YXG50 Attack
+Patch[25]=S-YXG50 Release
+Patch[27]=S-YXG50 Rezo Sweep
+Patch[28]=S-YXG50 Mute
+Patch[32]=S-YXG50 Chorus 1
+Patch[33]=S-YXG50 Chorus 2
+Patch[34]=S-YXG50 Chorus 3
+Patch[35]=S-YXG50 Octave Layered 1
+Patch[36]=S-YXG50 Octave Layered 2
+Patch[37]=S-YXG50 5th Layered 1
+Patch[38]=S-YXG50 5th Layered 2
+Patch[40]=S-YXG50 Tutti 1
+Patch[41]=S-YXG50 Tutti 2
+Patch[42]=S-YXG50 Tutti 3
+Patch[42]=S-YXG50 VeloSw
+Patch[45]=S-YXG50 VeloFade
+Patch[64]=S-YXG50 Alt 1
+Patch[65]=S-YXG50 Alt 2
+Patch[66]=S-YXG50 Alt 3
+Patch[67]=S-YXG50 Alt 4
+Patch[68]=S-YXG50 Alt 5
+Patch[69]=S-YXG50 Alt 6
+Patch[70]=S-YXG50 Alt 7
+Patch[71]=S-YXG50 Alt 8
+Patch[72]=S-YXG50 Alt 9
+Patch[96]=S-YXG50 Related 1
+Patch[97]=S-YXG50 Related 2
+Patch[98]=S-YXG50 Related 3
+Patch[99]=S-YXG50 Related 4
+Patch[100]=S-YXG50 Related 5
+Patch[101]=S-YXG50 Related 6
+
+
+Patch[8192]=S-YXG50 SFX Voices
+
+Patch[16256]=S-YXG50 Drums
+Drum[16256,*]=1
+
+Patch[*]=1..128
+
+;
+; Supported features
+;
+SupportsPitchBend=1
+SupportsAfterTouch=1
+
+; When 2 note on for the same note on the same channel, need 2 note off messages
+OverlapSupport=1
+
+;
+; Use with VSTI with name:
+;
+VSTIName=Yamaha S-YXG50
+

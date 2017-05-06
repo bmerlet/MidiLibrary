@@ -55,6 +55,9 @@ namespace MidiLibrary.Instruments
             // Motif-Rack ES
             result.AddRange(ParseEmbeddedResourceInstrumentFile("MotifRackES"));
 
+            // Yamaha S-YXG50
+            result.AddRange(ParseEmbeddedResourceInstrumentFile("S_YXG50"));
+
             // Read all the instruments in $USER/MidiInstruments
             string path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) +
                 Path.DirectorySeparatorChar + MidInstrumentDirectory;
@@ -199,6 +202,7 @@ namespace MidiLibrary.Instruments
                 var overlapSupport = EOverlapSupport.None;
                 bool supportsPitchBend = false;
                 bool supportsAfterTouch = false;
+                string vstiName = null;
 
                 foreach (var kvp in instrumentItem.Values)
                 {
@@ -218,6 +222,10 @@ namespace MidiLibrary.Instruments
                     {
                         supportsAfterTouch = int.Parse(kvp.Value) != 0;
                     }
+                    else if (kvp.Key == "VSTIName")
+                    {
+                        vstiName = kvp.Value;
+                    }
                     else if (kvp.Key.StartsWith("Drum[") && kvp.Value == "1")
                     {
                         // Note: we only support whole banks defined as drum, not individual patches within a bank
@@ -230,7 +238,7 @@ namespace MidiLibrary.Instruments
                 }
 
                 // Create the instrument
-                var instrument = new Instrument(instrumentItem.Name, patchSelMethod, overlapSupport, supportsAfterTouch, supportsPitchBend);
+                var instrument = new Instrument(instrumentItem.Name, patchSelMethod, overlapSupport, supportsAfterTouch, supportsPitchBend, vstiName);
 
                 // Populate it based on the name/value entries
                 foreach (var kv in instrumentItem.Values)
@@ -308,6 +316,7 @@ namespace MidiLibrary.Instruments
                         case "OverlapSupport":
                         case "SupportsPitchBend":
                         case "SupportsAfterTouch":
+                        case "VSTIName":
                             // Already processed above
                             break;
                         default:
