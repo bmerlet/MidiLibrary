@@ -1,0 +1,93 @@
+; ----------------------------------------------------------------------
+; Instrument file for the Aria VST instrument coming with the
+; Akai EWI USB wind instrument
+; ----------------------------------------------------------------------
+;
+; This file contains the controller definitions for the Aria VST instrument
+;
+
+; ----------------------------------------------------------------------
+; Define controllers
+; ----------------------------------------------------------------------
+.Controller Names
+
+
+[Aria Controllers]
+0=0 Bank Select MSB
+1=1 Modulation
+2=2 Breath
+4=4 Foot Pedal
+5=5 Portamento Time
+6=6 Data Entry MSB
+7=7 Volume
+8=8 Balance
+10=10 Pan
+11=11 Expression
+12=12 Effect control 1
+13=13 Effect control 2
+16=16 Slider 1
+17=17 Slider 2
+18=18 Slider 3
+19=19 Slider 4
+32=32 Bank Select LSB
+33=33 Modulation Wheel (fine)
+34=34 Breath (fine)
+36=36 Foot pedal (fine)
+37=37 Portamento Time (fine)
+38=38 Data Entry LSB
+39=39 Volume(fine)
+40=40 Balance (fine)
+42=42 Pan (fine)
+43=43 Expression (fine)
+44=44 Effect control 1 (fine)
+45=45 Effect control 2 (fine)
+64=64 Sustain
+65=65 Portamento
+66=66 Sostenuto
+67=67 Soft Pedal
+68=68 Legato Foot Switch
+
+70=70 Sound Variation
+71=71 Sound Timbre
+72=72 Sound Release Time
+73=73 Sound Attack Time
+74=74 Sound Brightness
+75=75 Sound Control 6
+76=76 Sound Control 7
+77=77 Sound Control 8
+78=78 Sound Control 9
+79=79 Sound Control 10
+91=91 Effects Level
+92=92 Tremolo Level
+93=93 Chorus Level
+94=94 Celeste Level
+95=95 Phaser Level
+96=96 Data Increment
+97=97 Data Decrement
+98=98 NRPN LSB
+99=99 NRPN MSB
+100=100 RPN LSB
+101=101 RPN MSB
+120=120 All Sound Off
+121=121 Reset All Controllers
+123=123 All Notes Off
+126=126 Pitch Bend Bite
+127=127 Pitch Bend Plates
+
+
+; ----------------------------------------------------------------------
+; Define instrument
+; ----------------------------------------------------------------------
+.Instrument Definitions
+
+[Aria EWI USB]
+Control=Aria Controllers
+
+SupportsPitchBend=1
+SupportsAfterTouch=1
+OverlapSupport=0
+
+;
+; Use with VSTI with name:
+;
+VSTIName=EWI USB

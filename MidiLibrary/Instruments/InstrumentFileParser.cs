@@ -37,8 +37,7 @@ namespace MidiLibrary.Instruments
         // Parse all known instruments (embedded and in $USER/MidiInstruments)
         public static Instrument[] GetKnownInstruments()
         {
-            string parsingErrors;
-            return GetKnownInstruments(out parsingErrors);
+            return GetKnownInstruments(out string parsingErrors);
         }
 
         // Parse all known instruments (embedded and in $USER/MidiInstruments), return any parsing error in a string
@@ -55,8 +54,14 @@ namespace MidiLibrary.Instruments
             // Motif-Rack ES
             result.AddRange(ParseEmbeddedResourceInstrumentFile("MotifRackES"));
 
-            // Yamaha S-YXG50
+            // Yamaha S-YXG50 (VST instrument)
             result.AddRange(ParseEmbeddedResourceInstrumentFile("S_YXG50"));
+
+            // Akai EWI USB
+            result.AddRange(ParseEmbeddedResourceInstrumentFile("EwiUsb"));
+
+            // Aria for EWI USB (VST instrument)
+            result.AddRange(ParseEmbeddedResourceInstrumentFile("AriaEwiUsb"));
 
             // Read all the instruments in $USER/MidiInstruments
             string path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) +
@@ -324,8 +329,18 @@ namespace MidiLibrary.Instruments
                     }
                 }
 
+                // If no patches are defined, define a dummy one
+                if (instrument.Banks.Count == 0)
+                {
+                    instrument.Banks.Add(new Bank(instrument, "Default", 0, false));
+                }
+                if (instrument.Banks[0].Patches.Count == 0)
+                {
+                    instrument.Banks[0].Patches.Add(new Patch(instrument.Banks[0], "[No patches]", 0));
+                }
+
                 // Add it to the collection
-                instruments.Add(instrument);
+                    instruments.Add(instrument);
             }
 
             return instruments;

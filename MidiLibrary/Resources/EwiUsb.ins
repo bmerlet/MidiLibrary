@@ -1,0 +1,78 @@
+; ----------------------------------------------------------------------
+; Instrument file for the Akai EWI USB wind instrument
+; ----------------------------------------------------------------------
+;
+; This file contains the commands that can be sent to the EWI Midi OUT
+; to configure it.
+;
+
+; ----------------------------------------------------------------------
+; NRPNs
+; ----------------------------------------------------------------------
+
+.NRPN Names
+
+[Configuration]
+
+; The various gains
+0=Breath Gain
+1=Bite Gain
+2=Bite AC Gain
+3=Pitch Bend Gain
+4=Key Delay
+
+; Midi channel
+256=Midi Channel
+
+; Fingering
+; 0: EWI, 1:Saxophone, 2: Flute, 3: Oboe, 4: EVI valve 1, 5: EVI Valve 2 
+257=Fingering
+
+; Transposition
+258=Transpose
+
+; Velocity (?)
+259=Velocity
+
+; Controllers used for breath, bite, bend
+260=Breath Controller 1
+261=Breath Controller 2
+263=Bite Controller 1
+264=Bite Controller 2
+265=Pitch Bend Up Controller
+266=Pitch Bend Down Controller
+
+; Send before dump request
+; Suspend = 20, Resume = 10
+132=Suspend/Resume
+
+; ----------------------------------------------------------------------
+; Sequences
+; ----------------------------------------------------------------------
+;
+; Vendor id $47, Device ID $7F, Model Id $6D
+.Sequences
+
+[Config Dump]
+Bank 0=F0 47 7F 6D 40 00 00 F7
+Bank 2=F0 47 7F 6D 42 00 00 F7
+
+[Safe Config Dump]
+Bank 0 Start=B0 63 01 B0 62 04 B0 06 20 F0 47 7F 6D 40 00 00 F7
+Bank 2 Start=B0 63 01 B0 62 04 B0 06 20 F0 47 7F 6D 42 00 00 F7
+End=B0 63 01 B0 62 04 B0 06 10
+
+
+; ----------------------------------------------------------------------
+.Instrument Definitions
+; ----------------------------------------------------------------------
+
+[EWI USB]
+NRPN=Configuration
+
+Sequence[0]=Config Dump
+Sequence[1]=Safe Config Dump
+
+SupportsPitchBend=0
+SupportsAfterTouch=0
+OverlapSupport=0
