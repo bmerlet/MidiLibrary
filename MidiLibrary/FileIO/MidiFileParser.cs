@@ -223,7 +223,7 @@ namespace MidiLibrary.FileIO
                     case EMidiCommand.StartSequence:
                     case EMidiCommand.ContinueSequence:
                     case EMidiCommand.StopSequence:
-                    case EMidiCommand.AutoSensing:
+                    case EMidiCommand.ActiveSensing:
                         throw new FormatException(string.Format("Found event type {0} - not supported!", command));
 
                     // Meta event

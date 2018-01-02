@@ -3,6 +3,7 @@
 //
 
 using MidiLibrary.CommonMessages;
+using MidiLibrary.RealTimeMessages;
 
 namespace MidiLibrary.WindowsMultiMedia
 {
@@ -34,6 +35,26 @@ namespace MidiLibrary.WindowsMultiMedia
                 // System message
                 channel = 0;
                 command = (EMidiCommand)rawCommand;
+
+                switch (command)
+                {
+                    case EMidiCommand.TimingClock:
+                        result = new TimingClockMessage();
+                        break;
+                    case EMidiCommand.StartSequence:
+                        result = new StartSequenceMessage();
+                        break;
+                    case EMidiCommand.ContinueSequence:
+                        result = new ContinueSequenceMessage();
+                        break;
+                    case EMidiCommand.StopSequence:
+                        result = new StopSequenceMessage();
+                        break;
+                    case EMidiCommand.ActiveSensing:
+                        result = new ActiveSensingMessage();
+                        break;
+                        break;
+                }
             }
             else
             {

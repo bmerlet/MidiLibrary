@@ -33,7 +33,7 @@ namespace MidiLibrary
         StartSequence = 0xFA,
         ContinueSequence = 0xFB,
         StopSequence = 0xFC,
-        AutoSensing = 0xFD,
+        ActiveSensing = 0xFE,
         MetaEvent = 0xFF, // Is system reset on a midi bus, is a meta event in midi files
 
         SystemMessageMask = 0xF0,

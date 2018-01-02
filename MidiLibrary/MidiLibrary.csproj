@@ -76,6 +76,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="RealTimeMessages\ActiveSensingMessage.cs" />
+    <Compile Include="RealTimeMessages\ContinueSequenceMessage.cs" />
+    <Compile Include="RealTimeMessages\StartSequenceMessage.cs" />
+    <Compile Include="RealTimeMessages\StopSequenceMessage.cs" />
+    <Compile Include="RealTimeMessages\TimingClockMessage.cs" />
     <Compile Include="SerMidiMessage.cs" />
     <Compile Include="WindowsMultiMedia\MidiBuffer.cs" />
     <Compile Include="WindowsMultiMedia\MidiEventArgs.cs" />
