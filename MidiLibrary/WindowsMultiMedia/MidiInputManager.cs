@@ -199,8 +199,8 @@ namespace MidiLibrary.WindowsMultiMedia
             }
         }
 
-        // Dispose: close all opened ports
-        public void Dispose()
+        // Reset: close all open ports
+        public void Reset()
         {
             foreach (var port in openedPorts)
             {
@@ -210,7 +210,13 @@ namespace MidiLibrary.WindowsMultiMedia
 
             openedPorts.Clear();
         }
-        
+
+        // Dispose: close all opened ports
+        public void Dispose()
+        {
+            Reset();
+        }
+
         #endregion
     }
 }
