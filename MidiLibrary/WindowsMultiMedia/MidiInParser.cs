@@ -53,7 +53,6 @@ namespace MidiLibrary.WindowsMultiMedia
                     case EMidiCommand.ActiveSensing:
                         result = new ActiveSensingMessage();
                         break;
-                        break;
                 }
             }
             else

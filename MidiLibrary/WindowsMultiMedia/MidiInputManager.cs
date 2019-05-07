@@ -126,7 +126,7 @@ namespace MidiLibrary.WindowsMultiMedia
                         // Port not open. We need to open it
                         port.MidiInputReceived += MidiInCallback;
                         var error = port.Open();
-                        if (error == MidiLibrary.EMMError.NOERROR)
+                        if (error == null)
                         {
                             Console.WriteLine("MidiInputManager: Opened Midi In port {0}: {1}", port.Id, port.Name);
                             port.Start();

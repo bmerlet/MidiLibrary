@@ -98,6 +98,7 @@
     <Compile Include="SysexMessages\MidiSysexMessage.cs" />
     <Compile Include="WindowsMultiMedia\MidiInputPort.cs" />
     <Compile Include="WindowsMultiMedia\MidiOutputPort.cs" />
+    <Compile Include="WindowsMultiMedia\WindowsUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

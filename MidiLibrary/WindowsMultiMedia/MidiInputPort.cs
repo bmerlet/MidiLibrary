@@ -78,7 +78,7 @@ namespace MidiLibrary.WindowsMultiMedia
         /// Construct a new midi input port.
         /// </summary>
         /// <param name="id">Id of the port, between 0 and the number returned by InputCount</param>
-        public MidiInputPort(uint id)
+        private MidiInputPort(uint id)
         {
             // Id of this port
             this.id = id;
@@ -156,19 +156,21 @@ namespace MidiLibrary.WindowsMultiMedia
         #region Public methods
 
         // Open the input port. Midi events cause the MidiInputReceived event to be raised
-        public EMMError Open()
+        public string Open()
         {
             // Open the port
-            return NativeMethods.midiInOpen(
+            EMMError st = NativeMethods.midiInOpen(
                 out handle,
                 id,
                 midiInProc,
                 IntPtr.Zero,
                 NativeMethods.CALLBACK_FUNCTION);
+
+            return WindowsUtil.StrError(st);
         }
 
         // Start the port and setup buffers to receives Sysex
-        public EMMError Start()
+        public string Start()
         {
             // Allocate buffer array
             if (buffers == null)
@@ -188,13 +190,13 @@ namespace MidiLibrary.WindowsMultiMedia
                     EMMError st = buffers[b].AddMidiInBuffer(handle);
                     if (st != EMMError.NOERROR)
                     {
-                        return st;
+                        return WindowsUtil.StrError(st);
                     }
                 }
             }
 
             // Finally, start the port
-            return NativeMethods.midiInStart(handle);
+            return WindowsUtil.StrError(NativeMethods.midiInStart(handle));
         }
 
         // Forward callback to user-provided function
@@ -313,13 +315,13 @@ namespace MidiLibrary.WindowsMultiMedia
         }
 
         // Stop the port
-        public EMMError Stop()
+        public string Stop()
         {
-            return NativeMethods.midiInStop(handle);
+            return WindowsUtil.StrError(NativeMethods.midiInStop(handle));
         }
 
         // Reset the port and free the sysex buffers
-        public EMMError Reset()
+        public string Reset()
         {
             EMMError st = NativeMethods.midiInReset(handle);
 
@@ -329,18 +331,19 @@ namespace MidiLibrary.WindowsMultiMedia
                 buffers = null;
             }
 
-            return st;
+            return WindowsUtil.StrError(st);
         }
 
         // Close the port
-        public EMMError Close()
+        public string Close()
         {
             Stop();
             Reset();
             EMMError result = NativeMethods.midiInClose(handle);
             handle = IntPtr.Zero;
             MidiInputReceived = null;
-            return result;
+
+            return WindowsUtil.StrError(result);
         }
 
         #endregion

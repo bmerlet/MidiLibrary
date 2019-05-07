@@ -62,19 +62,6 @@ namespace MidiLibrary.WindowsMultiMedia
 
         #region Private members
 
-        // Device id
-        private uint id;
-
-        // Properties of the device
-        private ushort manufacturerId;
-        private ushort productId;
-        private string driverVersion;
-        private ETechnology technology;
-        private ushort maxVoices;
-        private ushort maxNotes;
-        private ushort channelMask;
-        private string name;
-
         // Handle when this device is opened
         private IntPtr handle;
 
@@ -99,10 +86,10 @@ namespace MidiLibrary.WindowsMultiMedia
         /// Construct a new midi input port.
         /// </summary>
         /// <param name="id">Id of the port, between 0 and the number returned by InputCount</param>
-        public MidiOutputPort(uint id)
+        private MidiOutputPort(uint id)
         {
             // Id of this port
-            this.id = id;
+            this.Id = id;
 
             // Native callback calling MidiProc() 
             midiOutProc = new NativeMethods.MidiOutProc(MidiProc);
@@ -140,50 +127,23 @@ namespace MidiLibrary.WindowsMultiMedia
 
         #region Properties
 
-        public uint Id
-        {
-            get { return id; }
-        }
+        public uint Id { get; }
 
-        public ushort ManufacturerId
-        {
-            get { return manufacturerId; }
-        }
+        public ushort ManufacturerId { get; private set; }
 
-        public ushort ProductId
-        {
-            get { return productId; }
-        }
+        public ushort ProductId { get; private set; }
 
-        public String Name
-        {
-            get { return name; }
-        }
+        public String Name { get; private set; }
 
-        public ETechnology Technology
-        {
-            get { return technology; }
-        }
+        public ETechnology Technology { get; private set; }
 
-        public ushort MaxVoices
-        {
-            get { return maxVoices; }
-        }
+        public ushort MaxVoices { get; private set; }
 
-        public ushort MaxNotes
-        {
-            get { return maxNotes; }
-        }
+        public ushort MaxNotes { get; private set; }
 
-        public ushort ChannelMask
-        {
-            get { return channelMask; }
-        }
+        public ushort ChannelMask { get; private set; }
 
-        public String DriverVersion
-        {
-            get { return driverVersion; }
-        }
+        public String DriverVersion { get; private set; }
 
         public uint Volume
         {
@@ -205,18 +165,19 @@ namespace MidiLibrary.WindowsMultiMedia
                 }
             }
         }
+
         #endregion
 
         #region Public methods
 
         // Open the input port.
-        public EMMError Open()
+        public string Open()
         {
             return Open(null);
         }
 
         // Open the input port. callback is for non-midi events such as done playing etc
-        public EMMError Open(MidiEventHandler callback)
+        public string Open(MidiEventHandler callback)
         {
             // Memorize the user callback
             this.callback = callback;
@@ -227,18 +188,18 @@ namespace MidiLibrary.WindowsMultiMedia
             // Open the port
             var st = NativeMethods.midiOutOpen(
                 out handle,
-                id,
+                Id,
                 nativeCallback,
                 IntPtr.Zero,
                 flags);
 
-            return st;
+            return WindowsUtil.StrError(st);
         }
 
         // Reset the port
-        public EMMError Reset()
+        public string Reset()
         {
-            return NativeMethods.midiOutReset(handle);
+            return WindowsUtil.StrError(NativeMethods.midiOutReset(handle));
         }
 
         // Forward callback to user-provided function
@@ -259,7 +220,7 @@ namespace MidiLibrary.WindowsMultiMedia
         }
 
         // Send a message
-        public EMMError Send(MidiMessage m)
+        public string Send(MidiMessage m)
         {
             var st = EMMError.NOERROR;
 
@@ -299,15 +260,15 @@ namespace MidiLibrary.WindowsMultiMedia
                 st = NativeMethods.midiOutShortMsg(handle, sm);
             }
 
-            return st;
+            return WindowsUtil.StrError(st);
         }
 
         // Close the port
-        public EMMError Close()
+        public string Close()
         {
             EMMError result = NativeMethods.midiOutClose(handle);
             handle = IntPtr.Zero;
-            return result;
+            return WindowsUtil.StrError(result);
         }
 
         #endregion
@@ -363,7 +324,7 @@ namespace MidiLibrary.WindowsMultiMedia
         private void GetAndParseMidiOutCaps()
         {
             // Prepare parameters
-            IntPtr pId = (IntPtr)id;
+            IntPtr pId = (IntPtr)Id;
             NativeMethods.MIDIOUTCAPS caps = new NativeMethods.MIDIOUTCAPS();
             uint sz = (uint)Marshal.SizeOf(typeof(NativeMethods.MIDIOUTCAPS));
 
@@ -371,14 +332,14 @@ namespace MidiLibrary.WindowsMultiMedia
             NativeMethods.midiOutGetDevCaps(pId, caps, sz);
 
             // Parse results
-            manufacturerId = caps.wMid;
-            productId = caps.wPid;
-            name = caps.szPname;
-            technology = (ETechnology)caps.wTechnology;
-            maxVoices = caps.wVoices;
-            maxNotes = caps.wNotes;
-            channelMask = caps.wChannelMask;
-            driverVersion = String.Format("{0}.{1}", caps.vDriverVersion >> 8, caps.vDriverVersion & 0xff);
+            ManufacturerId = caps.wMid;
+            ProductId = caps.wPid;
+            Name = caps.szPname;
+            Technology = (ETechnology)caps.wTechnology;
+            MaxVoices = caps.wVoices;
+            MaxNotes = caps.wNotes;
+            ChannelMask = caps.wChannelMask;
+            DriverVersion = String.Format("{0}.{1}", caps.vDriverVersion >> 8, caps.vDriverVersion & 0xff);
         }
 
         #endregion

@@ -120,24 +120,24 @@ namespace Test
 
             loopIn.MidiInputReceived += LoopInCallback;
 
-            if (loopIn.Open() != EMMError.NOERROR)
+            if (loopIn.Open() != null)
             {
                 throw new InvalidOperationException("Cannot open loop input");
             }
 
-            if (loopIn.Start() != EMMError.NOERROR)
+            if (loopIn.Start() != null)
             {
                 throw new InvalidOperationException("Cannot start loop input");
             }
 
-            if (loopOut.Open() != EMMError.NOERROR)
+            if (loopOut.Open() != null)
             {
                 throw new InvalidOperationException("Cannot open loop output");
             }
 
             // Send a short message
             var message = new MidiNoteMessage(2, EMidiCommand.NoteOn, 63, 100);
-            if (loopOut.Send(message) != EMMError.NOERROR)
+            if (loopOut.Send(message) != null)
             {
                 throw new InvalidOperationException("Cannot send short message to loop output");
             }
@@ -151,7 +151,7 @@ namespace Test
             // Send a long message (sysex)
             var sysex = new MidiSysexMessage(new byte[] { 0xF0, 0x55, 0x15, 0x02, 0x19, 0x64, 0xF7 });
 
-            if (loopOut.Send(sysex) != EMMError.NOERROR)
+            if (loopOut.Send(sysex) != null)
             {
                 throw new InvalidOperationException("Cannot send short message to loop output");
             }
@@ -163,12 +163,12 @@ namespace Test
             }
 
             // Close the ports
-            if (loopIn.Close() != EMMError.NOERROR)
+            if (loopIn.Close() != null)
             {
                 throw new InvalidOperationException("Cannot close loop input");
             }
 
-            if (loopOut.Close() != EMMError.NOERROR)
+            if (loopOut.Close() != null)
             {
                 throw new InvalidOperationException("Cannot close loop output");
             }
