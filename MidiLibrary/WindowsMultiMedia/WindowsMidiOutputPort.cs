@@ -9,12 +9,14 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+
+using MidiLibrary.PortIO;
 using MidiLibrary.SysexMessages;
 using MidiLibrary.Sequencer;
 
 namespace MidiLibrary.WindowsMultiMedia
 {
-    public class MidiOutputPort : IDisposable
+    public class WindowsMidiOutputPort : IMidiOutputPort, IDisposable
     {
         #region Enums
 
@@ -45,14 +47,14 @@ namespace MidiLibrary.WindowsMultiMedia
         /// Returns all midi output ports
         /// </summary>
         /// <returns>Array containing every midi input port defined in the system</returns>
-        static public MidiOutputPort[] GetAllPorts()
+        static internal WindowsMidiOutputPort[] GetAllPorts()
         {
             uint numDevices = Count;
-            MidiOutputPort[] devs = new MidiOutputPort[numDevices];
+            WindowsMidiOutputPort[] devs = new WindowsMidiOutputPort[numDevices];
 
             for (uint d = 0; d < numDevices; d++)
             {
-                devs[d] = new MidiOutputPort(d);
+                devs[d] = new WindowsMidiOutputPort(d);
             }
 
             return devs;
@@ -69,7 +71,7 @@ namespace MidiLibrary.WindowsMultiMedia
         private NativeMethods.MidiOutProc midiOutProc;
 
         // Callback provided by the user
-        private MidiEventHandler callback;
+        private EventHandler<IMidiEventArgs> callback;
 
         // Volume cache
         bool volumeRead;
@@ -86,7 +88,7 @@ namespace MidiLibrary.WindowsMultiMedia
         /// Construct a new midi input port.
         /// </summary>
         /// <param name="id">Id of the port, between 0 and the number returned by InputCount</param>
-        private MidiOutputPort(uint id)
+        private WindowsMidiOutputPort(uint id)
         {
             // Id of this port
             this.Id = id;
@@ -118,7 +120,7 @@ namespace MidiLibrary.WindowsMultiMedia
             GC.SuppressFinalize(this);
         }
 
-        ~MidiOutputPort()
+        ~WindowsMidiOutputPort()
         {
             Dispose(false);
         }
@@ -177,7 +179,7 @@ namespace MidiLibrary.WindowsMultiMedia
         }
 
         // Open the input port. callback is for non-midi events such as done playing etc
-        public string Open(MidiEventHandler callback)
+        public string Open(EventHandler<IMidiEventArgs> callback)
         {
             // Memorize the user callback
             this.callback = callback;
@@ -215,7 +217,7 @@ namespace MidiLibrary.WindowsMultiMedia
                 MidiEvent e = MidiInParser.ParseMimDataMessage((uint)dwParam1, (uint)dwParam2);
 
                 // Give it to the user
-                callback(this, new MidiEventArgs(e, dwParam1, dwParam2));
+                callback(this, new WindowsMidiEventArgs(e, dwParam1, dwParam2));
             }
         }
 
@@ -300,11 +302,6 @@ namespace MidiLibrary.WindowsMultiMedia
                     // End of sequence: nothing to do
                     break;
             }
-        }
-
-        public void AllNotesOff()
-        {
-            Reset();
         }
 
         public void PlaySequencerEvent(ISequencerMessage sequencerMessage)

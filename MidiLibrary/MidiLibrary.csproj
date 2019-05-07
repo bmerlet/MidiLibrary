@@ -71,6 +71,9 @@
     <Compile Include="MidiEvent.cs" />
     <Compile Include="FileIO\MidiFileFormatReader.cs" />
     <Compile Include="FileIO\MidiFileParser.cs" />
+    <Compile Include="PortIO\IMidiEventArgs.cs" />
+    <Compile Include="PortIO\IMidiOutputPort.cs" />
+    <Compile Include="PortIO\PortEnumerator.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -83,7 +86,7 @@
     <Compile Include="RealTimeMessages\TimingClockMessage.cs" />
     <Compile Include="SerMidiMessage.cs" />
     <Compile Include="WindowsMultiMedia\MidiBuffer.cs" />
-    <Compile Include="WindowsMultiMedia\MidiEventArgs.cs" />
+    <Compile Include="WindowsMultiMedia\WindowsMidiEventArgs.cs" />
     <Compile Include="WindowsMultiMedia\MidiInParser.cs" />
     <Compile Include="MidiMessage.cs" />
     <Compile Include="WindowsMultiMedia\MidiInputManager.cs" />
@@ -97,7 +100,7 @@
     <Compile Include="Sequencer\SequencerEventArg.cs" />
     <Compile Include="SysexMessages\MidiSysexMessage.cs" />
     <Compile Include="WindowsMultiMedia\MidiInputPort.cs" />
-    <Compile Include="WindowsMultiMedia\MidiOutputPort.cs" />
+    <Compile Include="WindowsMultiMedia\WindowsMidiOutputPort.cs" />
     <Compile Include="WindowsMultiMedia\WindowsUtil.cs" />
   </ItemGroup>
   <ItemGroup>

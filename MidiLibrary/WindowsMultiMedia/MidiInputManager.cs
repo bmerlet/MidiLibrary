@@ -149,7 +149,7 @@ namespace MidiLibrary.WindowsMultiMedia
         }
 
         // Midi events callback: activate the midiInput event
-        public void MidiInCallback(object sender, MidiEventArgs e)
+        public void MidiInCallback(object sender, WindowsMidiEventArgs e)
         {
             if (midiInput != null && e.MidiEvent.Message != null)
             {

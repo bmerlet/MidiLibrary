@@ -14,6 +14,7 @@ using MidiLibrary.Instruments;
 using MidiLibrary.FileIO;
 using MidiLibrary.WindowsMultiMedia;
 using MidiLibrary.Sequencer;
+using MidiLibrary.PortIO;
 
 namespace Test
 {
@@ -32,7 +33,7 @@ namespace Test
         }
 
         private MidiSequence sequence;
-        private MidiOutputPort output;
+        private IMidiOutputPort output;
         private object lockObject = new object();
 
         private void TestParser()
@@ -71,14 +72,17 @@ namespace Test
         private void TestMidiOut()
         {
             Console.WriteLine("=== Test output ports");
-            MidiOutputPort[] ports = MidiOutputPort.GetAllPorts();
+            IMidiOutputPort[] ports = PortEnumerator.OutputPorts;
             Console.WriteLine("  Found {0} output midi port(s)", ports.Length);
             foreach (var port in ports)
             {
-                Console.WriteLine("     {0}: Port {1}, tech {2}, mId/pId {3}/{4}", port.Id, port.Name, port.Technology, port.ManufacturerId, port.ProductId);
-                if (port.Technology == MidiOutputPort.ETechnology.MidiMapper)
+                if (port is WindowsMidiOutputPort windowsPort)
                 {
-                    output = port;
+                    Console.WriteLine("     {0}: Port {1}, tech {2}, mId/pId {3}/{4}", windowsPort.Id, windowsPort.Name, windowsPort.Technology, windowsPort.ManufacturerId, windowsPort.ProductId);
+                    if (windowsPort.Technology == WindowsMidiOutputPort.ETechnology.MidiMapper)
+                    {
+                        output = windowsPort;
+                    }
                 }
             }
 
@@ -105,7 +109,7 @@ namespace Test
             }
             Console.WriteLine("  Found LoopBe  input midi port: " + loopIn.Name);
 
-            var outPorts = MidiOutputPort.GetAllPorts();
+            var outPorts = PortEnumerator.OutputPorts;
             var loopOut = outPorts.First(p => p.Name.StartsWith("LoopBe"));
             if (loopOut == null)
             {
@@ -176,7 +180,7 @@ namespace Test
             Console.WriteLine("  Loop test completed successfully.");
         }
 
-        private void LoopInCallback(object sender, MidiEventArgs e)
+        private void LoopInCallback(object sender, WindowsMidiEventArgs e)
         {
             var noteOn = e.MidiEvent.Message as MidiNoteMessage;
 

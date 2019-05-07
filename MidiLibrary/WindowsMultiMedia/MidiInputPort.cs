@@ -43,7 +43,7 @@ namespace MidiLibrary.WindowsMultiMedia
 
         #region Events
 
-        public event MidiEventHandler MidiInputReceived;
+        public event EventHandler<WindowsMidiEventArgs> MidiInputReceived;
 
         #endregion
 
@@ -214,7 +214,7 @@ namespace MidiLibrary.WindowsMultiMedia
                     MidiEvent e = MidiInParser.ParseMimDataMessage((uint)dwParam1, (uint)dwParam2);
 
                     // Give it to the user
-                    MidiInputReceived.Invoke(this, new MidiEventArgs(e, dwParam1, dwParam2));
+                    MidiInputReceived.Invoke(this, new WindowsMidiEventArgs(e, dwParam1, dwParam2));
                 }
             }
             else if (wMsg == EMMMidiMessages.MIMLONG_DATA)
@@ -306,7 +306,7 @@ namespace MidiLibrary.WindowsMultiMedia
                                 var e = new MidiEvent(sysex, (uint)dwParam2);
 
                                 // Give it to the user
-                                MidiInputReceived.Invoke(this, new MidiEventArgs(e, dwParam1, dwParam2));
+                                MidiInputReceived.Invoke(this, new WindowsMidiEventArgs(e, dwParam1, dwParam2));
                             }
                         }
                     }
