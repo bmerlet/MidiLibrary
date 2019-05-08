@@ -96,7 +96,6 @@ namespace MidiLibrary.Alsa
         // Port name, e.g. AKM320 MIDI 1
         public string Name { get; }
 
-
         // Volume
         public uint Volume
         {
@@ -137,7 +136,7 @@ namespace MidiLibrary.Alsa
 
             // Open the port
             var st = AlsaNativeMethods.Snd_rawmidi_open_output(
-                IntPtr.Zero, ref handle, Device, AlsaNativeMethods.EMode.SND_RAWMIDI_NONBLOCK);
+                    IntPtr.Zero, ref handle, Device, AlsaNativeMethods.EMode.SND_RAWMIDI_NONBLOCK);
 
             return AlsaUtils.StrError(st);
         }
@@ -153,6 +152,13 @@ namespace MidiLibrary.Alsa
         public string Send(MidiMessage m)
         {
             byte[] data = m.GetAsByteArray();
+
+            // Meta messages are not sent over the wire
+            if (data == null)
+            {
+                return null; 
+            }
+
             ulong size = (ulong)data.Length;
 
             long st = AlsaNativeMethods.Snd_rawmidi_write(handle, data, size);

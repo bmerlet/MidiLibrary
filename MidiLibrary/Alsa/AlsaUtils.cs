@@ -86,7 +86,8 @@ namespace MidiLibrary.Alsa
                     err = AlsaNativeMethods.Snd_ctl_rawmidi_info(handlePtr, infoPtr);
                     if (err >= 0)
                     {
-                        // We have a midi output device!
+                        // We have a midi device of the type we are looking for!
+
                         // Get number of sub-devices
                         int subDeviceCount = AlsaNativeMethods.Snd_rawmidi_info_get_subdevices_count(infoPtr);
 

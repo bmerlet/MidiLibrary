@@ -33,8 +33,7 @@ namespace MidiLibrary.PortIO
             {
                 if (Platform.IsRunningOnMono)
                 {
-                    //return AlsaMidiInputPort.GetAllPorts();
-                    return new IMidiInputPort[0];
+                    return AlsaMidiInputPort.GetAllPorts();
                 }
                 else
                 {

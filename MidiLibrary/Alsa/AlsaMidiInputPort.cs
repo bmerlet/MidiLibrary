@@ -12,7 +12,7 @@ namespace MidiLibrary.Alsa
     {
         #region Port enumeration
 
-        public static IMidiInputPort[] GetInputPorts()
+        public static IMidiInputPort[] GetAllPorts()
         {
             var devices = AlsaUtils.EnumerateMidiPorts(AlsaNativeMethods.ESnd_rawmidi_stream.SND_RAWMIDI_STREAM_INPUT);
             var ports = new List<IMidiInputPort>();
@@ -66,7 +66,7 @@ namespace MidiLibrary.Alsa
         {
             // Open the port
             var st = AlsaNativeMethods.Snd_rawmidi_open_input(
-                ref handle, IntPtr.Zero, Device, AlsaNativeMethods.EMode.SND_RAWMIDI_NONBLOCK);
+                    ref handle, IntPtr.Zero, Device, AlsaNativeMethods.EMode.SND_RAWMIDI_NONBLOCK);
 
             return AlsaUtils.StrError(st);
         }
@@ -134,7 +134,12 @@ namespace MidiLibrary.Alsa
                 st = AlsaNativeMethods.Poll(pollAreaPtr, numPollStructs, 200);
                 if (st < 0)
                 {
-                    Console.WriteLine("MidiIn: Cannot poll - " + AlsaUtils.StrError(st));
+                    var errno = Marshal.GetLastWin32Error();
+                    if (errno == 4 /* EINTR */)
+                    {
+                        continue;
+                    }
+                    Console.WriteLine("MidiIn: Cannot poll - errno = " + errno);
                     break;
                 }
                 if (st == 0)

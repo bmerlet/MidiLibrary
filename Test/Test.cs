@@ -28,6 +28,7 @@ namespace Test
             t.TestInstrumentParser();
             t.TestMidiOut();
             t.TestMidiInOut();
+            // Only if you have a kbd t.TestmidiIn();
             t.TestSequencer();
             Console.WriteLine("=== All tests done");
         }
@@ -209,6 +210,52 @@ namespace Test
 
             throw new InvalidOperationException("Loop test: Got unknown message on loop input: " + e.MidiEvent.Message);
         }
+
+        private void TestmidiIn()
+        {
+            Console.WriteLine("=== Test Midi In");
+
+            var inPorts = PortEnumerator.InputPorts;
+            if (inPorts.Length == 0)
+            {
+                Console.WriteLine("  No input port found - skipping test");
+                return;
+            }
+
+            var inPort = inPorts[0];
+            inPort.MidiInputReceived += MidiInTest_MidiInputReceived;
+            inPort.Open();
+            inPort.Start();
+
+            Console.WriteLine("  Please key 3 notes on " + inPort.Name);
+
+            while (numNoteOn < 3 && numNoteOff < 3)
+            {
+                Thread.Sleep(100);
+            }
+
+            inPort.Stop();
+            inPort.Close();
+        }
+
+        private int numNoteOn;
+        private int numNoteOff;
+
+        void MidiInTest_MidiInputReceived(object sender, IMidiEventArgs e)
+        {
+            if (e.MidiEvent.Message is MidiNoteMessage mnm)
+            {
+                if (mnm.Action == EMidiNoteAction.On)
+                {
+                    numNoteOn += 1;
+                }
+                else if (mnm.Action == EMidiNoteAction.Off)
+                {
+                    numNoteOff += 1;
+                }
+            }
+        }
+
 
         private void TestSequencer()
         {

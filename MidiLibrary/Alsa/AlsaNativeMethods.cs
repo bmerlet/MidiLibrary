@@ -153,7 +153,7 @@ namespace MidiLibrary.Alsa
 
         // poll()
         // int poll(struct pollfd *fds, nfds_t nfds, int timeout);
-        [DllImport("libc.so.6", EntryPoint = "poll")]
+        [DllImport("libc", EntryPoint = "poll", SetLastError = true)]
         internal extern static int Poll(IntPtr fds, int nfds, int timeout);
 
         // Poll events
