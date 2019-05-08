@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 
-namespace MidiLibrary.WindowsMultiMedia
+namespace MidiLibrary.PortIO
 {
     /// <summary>
     /// Open and closes midi input ports based on whether they are physically connected or not
@@ -18,7 +18,7 @@ namespace MidiLibrary.WindowsMultiMedia
         #region Private members
 
         // List of opened ports
-        private List<MidiInputPort> openedPorts;
+        private List<IMidiInputPort> openedPorts;
 
         #endregion
 
@@ -26,7 +26,7 @@ namespace MidiLibrary.WindowsMultiMedia
 
         public MidiInputManager()
         {
-            this.openedPorts = new List<MidiInputPort>();
+            this.openedPorts = new List<IMidiInputPort>();
             this.midiInput = null;
         }
 
@@ -85,25 +85,25 @@ namespace MidiLibrary.WindowsMultiMedia
                 namesOfportsToOpen = new StringCollection();
             }
 
-            var currentPorts = new List<MidiInputPort>(MidiInputPort.GetAllPorts());
+            var currentPorts = new List<IMidiInputPort>(PortEnumerator.InputPorts);
 
             // Look at all the opened ports and remove the ones that are not connected or
             // that are not in the list of ports to open
             var oldOpenedPorts = openedPorts;
-            openedPorts = new List<MidiInputPort>();
+            openedPorts = new List<IMidiInputPort>();
             foreach (var port in oldOpenedPorts)
             {
                 if (!namesOfportsToOpen.Contains(port.Name))
                 {
                     // This port does not belong to the list of ports to open - close it
-                    Console.WriteLine("MidiInputManager: Closing Midi In port " + port.Id + ": " + port.Name + " because it is not on the list of ports to open");
+                    Console.WriteLine("MidiInputManager: Closing Midi In port " + port.Name + ": " + port.Name + " because it is not on the list of ports to open");
                     port.Close();
                     portsChanged = true;
                 }
                 else if (currentPorts.Find(p => p.Name == port.Name) == null)
                 {
                     // This port is disconnected - close it
-                    Console.WriteLine("MidiInputManager: Closing Midi In port " + port.Id + ": " + port.Name + " because it is disconnected");
+                    Console.WriteLine("MidiInputManager: Closing Midi In port " + port.Name + ": " + port.Name + " because it is disconnected");
                     port.Close();
                     portsChanged = true;
                 }
@@ -128,14 +128,14 @@ namespace MidiLibrary.WindowsMultiMedia
                         var error = port.Open();
                         if (error == null)
                         {
-                            Console.WriteLine("MidiInputManager: Opened Midi In port {0}: {1}", port.Id, port.Name);
+                            Console.WriteLine("MidiInputManager: Opened Midi In port {0}", port.Name);
                             port.Start();
                             openedPorts.Add(port);
                             portsChanged = true;
                         }
                         else
                         {
-                            Console.WriteLine("MidiInputManager: Failed to open Midi In port {0}: {1} - {2}", port.Id, port.Name, error);
+                            Console.WriteLine("MidiInputManager: Failed to open Midi In port {0}: {1}", port.Name, error);
                         }
                     }
                 }
@@ -149,7 +149,7 @@ namespace MidiLibrary.WindowsMultiMedia
         }
 
         // Midi events callback: activate the midiInput event
-        public void MidiInCallback(object sender, WindowsMidiEventArgs e)
+        public void MidiInCallback(object sender, IMidiEventArgs e)
         {
             if (midiInput != null && e.MidiEvent.Message != null)
             {
@@ -171,7 +171,7 @@ namespace MidiLibrary.WindowsMultiMedia
 
             // Get the names of the connected devices
             var connectedDeviceNames = new List<string>();
-            foreach (var d in MidiInputPort.GetAllPorts())
+            foreach (var d in PortEnumerator.InputPorts)
             {
                 connectedDeviceNames.Add(d.Name);
             }
@@ -204,7 +204,7 @@ namespace MidiLibrary.WindowsMultiMedia
         {
             foreach (var port in openedPorts)
             {
-                Console.WriteLine("MidiInputManager: closing Midi In port " + port.Id + ": " + port.Name + " because of disposition");
+                Console.WriteLine("MidiInputManager: closing Midi In port : " + port.Name + " because of disposition");
                 port.Close();
             }
 

@@ -6,11 +6,12 @@ using System;
 using System.Linq;
 using System.Runtime.InteropServices;
 using MidiLibrary;
+using MidiLibrary.PortIO;
 using MidiLibrary.SysexMessages;
 
 namespace MidiLibrary.WindowsMultiMedia
 {
-    public class MidiInputPort : IDisposable
+    public class WindowsMidiInputPort : IMidiInputPort, IDisposable
     {
         #region Static utilities
 
@@ -26,14 +27,14 @@ namespace MidiLibrary.WindowsMultiMedia
         /// Returns all midi input ports
         /// </summary>
         /// <returns>Array containing every midi input port defined in the system</returns>
-        static public MidiInputPort[] GetAllPorts()
+        static public WindowsMidiInputPort[] GetAllPorts()
         {
             uint numDevices = Count;
-            MidiInputPort[] devs = new MidiInputPort[numDevices];
+            WindowsMidiInputPort[] devs = new WindowsMidiInputPort[numDevices];
 
             for (uint d = 0; d < numDevices; d++)
             {
-                devs[d] = new MidiInputPort(d);
+                devs[d] = new WindowsMidiInputPort(d);
             }
 
             return devs;
@@ -43,7 +44,7 @@ namespace MidiLibrary.WindowsMultiMedia
 
         #region Events
 
-        public event EventHandler<WindowsMidiEventArgs> MidiInputReceived;
+        public event EventHandler<IMidiEventArgs> MidiInputReceived;
 
         #endregion
 
@@ -78,7 +79,7 @@ namespace MidiLibrary.WindowsMultiMedia
         /// Construct a new midi input port.
         /// </summary>
         /// <param name="id">Id of the port, between 0 and the number returned by InputCount</param>
-        private MidiInputPort(uint id)
+        private WindowsMidiInputPort(uint id)
         {
             // Id of this port
             this.id = id;
@@ -117,7 +118,7 @@ namespace MidiLibrary.WindowsMultiMedia
             // }
         }
 
-        ~MidiInputPort()
+        ~WindowsMidiInputPort()
         {
             Dispose(false);
         }

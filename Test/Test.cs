@@ -99,9 +99,9 @@ namespace Test
         {
             Console.WriteLine("=== Test midi in-out via LoopBe");
 
-            var inPorts = MidiInputPort.GetAllPorts();
+            var inPorts = PortEnumerator.InputPorts;
 
-            var loopIn = inPorts.First(p => p.Name.StartsWith("LoopBe"));
+            var loopIn = inPorts.FirstOrDefault(p => p.Name.StartsWith("LoopBe"));
             if (loopIn == null)
             {
                 Console.WriteLine("  No LoopBe input port found - skipping test");
@@ -180,7 +180,7 @@ namespace Test
             Console.WriteLine("  Loop test completed successfully.");
         }
 
-        private void LoopInCallback(object sender, WindowsMidiEventArgs e)
+        private void LoopInCallback(object sender, IMidiEventArgs e)
         {
             var noteOn = e.MidiEvent.Message as MidiNoteMessage;
 
@@ -217,7 +217,7 @@ namespace Test
             // Open output port
             if (output == null)
             {
-                Console.WriteLine("  No out put midi port fond - skipping");
+                Console.WriteLine("  No output midi port fond - skipping");
                 return;
             }
             output.Open(null);

@@ -89,7 +89,6 @@
     <Compile Include="WindowsMultiMedia\WindowsMidiEventArgs.cs" />
     <Compile Include="WindowsMultiMedia\MidiInParser.cs" />
     <Compile Include="MidiMessage.cs" />
-    <Compile Include="WindowsMultiMedia\MidiInputManager.cs" />
     <Compile Include="MidiSequence.cs" />
     <Compile Include="MidiTrack.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -99,9 +98,15 @@
     <Compile Include="Sequencer\MidiSequencer.cs" />
     <Compile Include="Sequencer\SequencerEventArg.cs" />
     <Compile Include="SysexMessages\MidiSysexMessage.cs" />
-    <Compile Include="WindowsMultiMedia\MidiInputPort.cs" />
+    <Compile Include="WindowsMultiMedia\WindowsMidiInputPort.cs" />
     <Compile Include="WindowsMultiMedia\WindowsMidiOutputPort.cs" />
     <Compile Include="WindowsMultiMedia\WindowsUtil.cs" />
+    <Compile Include="Alsa\AlsaMidiOutputPort.cs" />
+    <Compile Include="Alsa\AlsaNativeMethods.cs" />
+    <Compile Include="PortIO\IMidiInputPort.cs" />
+    <Compile Include="PortIO\MidiInputmanager.cs" />
+    <Compile Include="Alsa\AlsaMidiInputPort.cs" />
+    <Compile Include="Alsa\AlsaUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -123,6 +128,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\AriaEwiUsb.ins" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Alsa\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
