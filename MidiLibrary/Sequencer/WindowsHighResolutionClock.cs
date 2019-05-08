@@ -10,7 +10,7 @@ namespace MidiLibrary.Sequencer
     /// <summary>
     /// Interface to the processor tick counter
     /// </summary>
-    public class HighResolutionClock
+    public class WindowsHighResolutionClock : IHighResolutionClock
     {
         #region Private fields
 
@@ -20,7 +20,7 @@ namespace MidiLibrary.Sequencer
 
         #region Constructor
 
-        public HighResolutionClock()
+        public WindowsHighResolutionClock()
         {
             // Query the high-resolution timer only if it is supported.
             // A returned frequency of 1000 typically indicates that it is not
@@ -56,7 +56,7 @@ namespace MidiLibrary.Sequencer
         /// <summary>
         /// Return the current clock value (in ticks)
         /// </summary>
-        public ulong Value
+        public ulong CurrentTimeInTicks
         {
             get
             {
@@ -77,7 +77,7 @@ namespace MidiLibrary.Sequencer
         /// <returns>Elapsed time, in ticks</returns>
         public ulong GetElapsedInTicks(ulong t0)
         {
-            return Value - t0;
+            return CurrentTimeInTicks - t0;
         }
 
         /// <summary>
@@ -87,7 +87,12 @@ namespace MidiLibrary.Sequencer
         /// <returns>Elapsed time, in microseconds</returns>
         public uint GetElapsedInMicroSeconds(ulong t0)
         {
-            return (uint)TicksToMicroseconds(Value - t0);
+            ulong currentTime = CurrentTimeInTicks;
+            if (currentTime <= t0)
+            {
+                return 0;
+            }
+            return (uint)TicksToMicroseconds(currentTime - t0);
         }
 
         /// <summary>

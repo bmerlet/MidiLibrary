@@ -71,6 +71,7 @@
     <Compile Include="MidiEvent.cs" />
     <Compile Include="FileIO\MidiFileFormatReader.cs" />
     <Compile Include="FileIO\MidiFileParser.cs" />
+    <Compile Include="Platform.cs" />
     <Compile Include="PortIO\IMidiEventArgs.cs" />
     <Compile Include="PortIO\IMidiOutputPort.cs" />
     <Compile Include="PortIO\PortEnumerator.cs" />
@@ -84,6 +85,8 @@
     <Compile Include="RealTimeMessages\StartSequenceMessage.cs" />
     <Compile Include="RealTimeMessages\StopSequenceMessage.cs" />
     <Compile Include="RealTimeMessages\TimingClockMessage.cs" />
+    <Compile Include="Sequencer\GenericHighResolutionClock.cs" />
+    <Compile Include="Sequencer\IHighResolutionClock.cs" />
     <Compile Include="SerMidiMessage.cs" />
     <Compile Include="WindowsMultiMedia\MidiBuffer.cs" />
     <Compile Include="WindowsMultiMedia\WindowsMidiEventArgs.cs" />
@@ -92,7 +95,7 @@
     <Compile Include="MidiSequence.cs" />
     <Compile Include="MidiTrack.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sequencer\HighResolutionClock.cs" />
+    <Compile Include="Sequencer\WindowsHighResolutionClock.cs" />
     <Compile Include="Sequencer\ISequencerEvent.cs" />
     <Compile Include="Sequencer\ISequencerMessage.cs" />
     <Compile Include="Sequencer\MidiSequencer.cs" />
@@ -129,9 +132,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\AriaEwiUsb.ins" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Alsa\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

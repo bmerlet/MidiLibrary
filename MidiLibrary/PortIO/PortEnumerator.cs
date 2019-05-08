@@ -16,7 +16,7 @@ namespace MidiLibrary.PortIO
         {
             get
             {
-                if (IsRunningOnMono())
+                if (Platform.IsRunningOnMono)
                 {
                     return AlsaMidiOutputPort.GetAllPorts();
                 }
@@ -31,7 +31,7 @@ namespace MidiLibrary.PortIO
         {
             get
             {
-                if (IsRunningOnMono())
+                if (Platform.IsRunningOnMono)
                 {
                     //return AlsaMidiInputPort.GetAllPorts();
                     return new IMidiInputPort[0];
@@ -41,11 +41,6 @@ namespace MidiLibrary.PortIO
                     return WindowsMidiInputPort.GetAllPorts();
                 }
             }
-        }
-
-        public static bool IsRunningOnMono()
-        {
-            return Type.GetType("Mono.Runtime") != null;
         }
     }
 }

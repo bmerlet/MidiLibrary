@@ -35,7 +35,7 @@ namespace MidiLibrary.Sequencer
         private ISequencerEvent[] events;
 
         // High resolution clock
-        private HighResolutionClock hrc;
+        private IHighResolutionClock hrc;
 
         // The player thread
         private Thread player;
@@ -96,7 +96,7 @@ namespace MidiLibrary.Sequencer
             this.tempo = 1000000; // One second per quarter note, 60bpm
             this.t0Midi = 0;
             this.t0Tick = 0;
-            this.hrc = new HighResolutionClock();
+            this.hrc = HighResolutionClockFactory.GetHighResolutionClock();
             this.playing = false;
             this.closing = false;
             this.inPlayingLoop = false;
@@ -400,7 +400,7 @@ namespace MidiLibrary.Sequencer
 
         private void SetupTimeReference(uint midiTime)
         {
-            t0Tick = hrc.Value;
+            t0Tick = hrc.CurrentTimeInTicks;
             t0Midi = midiTime;
         }
 
