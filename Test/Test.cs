@@ -229,10 +229,26 @@ namespace Test
 
             Console.WriteLine("  Please key 3 notes on " + inPort.Name);
 
+            while (numNoteOn < 1 && numNoteOff < 1)
+            {
+                Thread.Sleep(100);
+            }
+
+            Console.WriteLine("  That's one");
+
+            while (numNoteOn < 2 && numNoteOff < 2)
+            {
+                Thread.Sleep(100);
+            }
+
+            Console.WriteLine("  That's two");
+
             while (numNoteOn < 3 && numNoteOff < 3)
             {
                 Thread.Sleep(100);
             }
+
+            Console.WriteLine("  And three!");
 
             inPort.Stop();
             inPort.Close();

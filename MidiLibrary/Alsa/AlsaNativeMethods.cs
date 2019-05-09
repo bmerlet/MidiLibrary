@@ -44,7 +44,8 @@ namespace MidiLibrary.Alsa
         internal extern static int Snd_ctl_rawmidi_next_device(IntPtr handleRef, ref int deviceIx);
 
         // Close a device on a sound card
-        [DllImport(LibraryName, EntryPoint = "snd_ctl_rawmidi_next_device")]
+        // int  snd_ctl_close (snd_ctl_t *ctl);
+        [DllImport(LibraryName, EntryPoint = "snd_ctl_close")]
         internal extern static int Snd_ctl_close(IntPtr handleRef);
 
         // Allocate info block for a raw midi device
