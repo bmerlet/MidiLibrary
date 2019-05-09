@@ -267,7 +267,7 @@ namespace Test
                 Console.WriteLine("  No output midi port fond - skipping");
                 return;
             }
-            output.Open(null);
+            output.Open();
 
             // Create sequencer
             MidiSequencer seq = new MidiSequencer(sequence);

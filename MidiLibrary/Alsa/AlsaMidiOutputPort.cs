@@ -32,12 +32,6 @@ namespace MidiLibrary.Alsa
         // Handle when this device is opened
         private IntPtr handle;
 
-        // Callback function called by the native code, which in turn calls MidiProc() in this class
-        //private WindowsNativeMethods.MidiOutProc midiOutProc;
-
-        // Callback provided by the user
-        private EventHandler<IMidiEventArgs> callback;
-
         // Volume cache
         bool volumeRead;
 
@@ -125,15 +119,6 @@ namespace MidiLibrary.Alsa
         // Open the input port.
         public string Open()
         {
-            return Open(null);
-        }
-
-        // Open the input port. callback is for non-midi events such as done playing etc
-        public string Open(EventHandler<IMidiEventArgs> callback)
-        {
-            // Memorize the user callback
-            this.callback = callback;
-
             // Open the port
             var st = AlsaNativeMethods.Snd_rawmidi_open_output(
                     IntPtr.Zero, ref handle, Device, AlsaNativeMethods.EMode.SND_RAWMIDI_NONBLOCK);

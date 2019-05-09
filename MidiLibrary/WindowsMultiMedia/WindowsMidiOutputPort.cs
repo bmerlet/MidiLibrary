@@ -67,12 +67,6 @@ namespace MidiLibrary.WindowsMultiMedia
         // Handle when this device is opened
         private IntPtr handle;
 
-        // Callback function called by the native code, which in turn calls MidiProc() in this class
-        private NativeMethods.MidiOutProc midiOutProc;
-
-        // Callback provided by the user
-        private EventHandler<IMidiEventArgs> callback;
-
         // Volume cache
         bool volumeRead;
         // Volume. Note: The low-order word of this location contains the left-channel
@@ -93,12 +87,8 @@ namespace MidiLibrary.WindowsMultiMedia
             // Id of this port
             this.Id = id;
 
-            // Native callback calling MidiProc() 
-            midiOutProc = new NativeMethods.MidiOutProc(MidiProc);
-
             // Init
             handle = IntPtr.Zero;
-            callback = null;
             volumeRead = false;
 
             // Get the capabilities of this device
@@ -175,25 +165,13 @@ namespace MidiLibrary.WindowsMultiMedia
         // Open the input port.
         public string Open()
         {
-            return Open(null);
-        }
-
-        // Open the input port. callback is for non-midi events such as done playing etc
-        public string Open(EventHandler<IMidiEventArgs> callback)
-        {
-            // Memorize the user callback
-            this.callback = callback;
-
-            NativeMethods.MidiOutProc nativeCallback = (callback == null) ? null : midiOutProc;
-            int flags = (callback == null) ? 0 : NativeMethods.CALLBACK_FUNCTION;
-
             // Open the port
             var st = NativeMethods.midiOutOpen(
                 out handle,
                 Id,
-                nativeCallback,
+                null,
                 IntPtr.Zero,
-                flags);
+                0);
 
             return WindowsUtil.StrError(st);
         }
@@ -202,23 +180,6 @@ namespace MidiLibrary.WindowsMultiMedia
         public string Reset()
         {
             return WindowsUtil.StrError(NativeMethods.midiOutReset(handle));
-        }
-
-        // Forward callback to user-provided function
-        private void MidiProc(IntPtr hMidiIn,
-            EMMMidiMessages wMsg,
-            IntPtr dwInstance,
-            IntPtr dwParam1,
-            IntPtr dwParam2)
-        {
-            if ((callback != null) && (wMsg == EMMMidiMessages.MIM_DATA))
-            {
-                // Make a midi event out of the incoming params
-                MidiEvent e = MidiInParser.ParseMimDataMessage((uint)dwParam1, (uint)dwParam2);
-
-                // Give it to the user
-                callback(this, new WindowsMidiEventArgs(e, dwParam1, dwParam2));
-            }
         }
 
         // Send a message
@@ -259,7 +220,10 @@ namespace MidiLibrary.WindowsMultiMedia
             else
             {
                 uint sm = m.GetAsShortMessage();
-                st = NativeMethods.midiOutShortMsg(handle, sm);
+                if (sm != uint.MaxValue)
+                {
+                    st = NativeMethods.midiOutShortMsg(handle, sm);
+                }
             }
 
             return WindowsUtil.StrError(st);
@@ -271,47 +235,6 @@ namespace MidiLibrary.WindowsMultiMedia
             EMMError result = NativeMethods.midiOutClose(handle);
             handle = IntPtr.Zero;
             return WindowsUtil.StrError(result);
-        }
-
-        #endregion
-
-        #region Receiving events from the sequencer
-
-        public void SequencerEventHandler(SequencerEventArg arg)
-        {
-            switch (arg.Type)
-            {
-                case SequencerEventArg.EType.Play:
-                    // Play an event.
-                    var midiEvent = arg.Event;
-                    if (midiEvent != null)
-                    {
-                        // I only know how to play midi events. Override this method to play other events
-                        var midiMessage = arg.Event.SequencerMessage as MidiMessage;
-                        if (midiMessage != null)
-                        {
-                            Send(midiMessage);
-                        }
-                    }
-                    break;
-                case SequencerEventArg.EType.Reset:
-                    // All notes off
-                    Reset();
-                    break;
-                case SequencerEventArg.EType.End:
-                    // End of sequence: nothing to do
-                    break;
-            }
-        }
-
-        public void PlaySequencerEvent(ISequencerMessage sequencerMessage)
-        {
-            // I only know how to play midi events
-            var midiMessage = sequencerMessage as MidiMessage;
-            if (midiMessage != null)
-            {
-                Send(midiMessage);
-            }
         }
 
         #endregion

@@ -133,7 +133,7 @@ namespace MidiLibrary.Alsa
 
         // Read from a port
         // ssize_t snd_rawmidi_read(snd_rawmidi_t *rmidi, void *buffer, size_t size);
-        [DllImport(LibraryName, EntryPoint = "snd_rawmidi_read")]
+        [DllImport(LibraryName, EntryPoint = "snd_rawmidi_read", SetLastError = true)]
         internal extern static long Snd_rawmidi_read(IntPtr rmidi, byte[] buffer, ulong size);
 
         // Get count of poll structures

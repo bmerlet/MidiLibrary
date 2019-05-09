@@ -20,9 +20,6 @@ namespace MidiLibrary.PortIO
         // Open the port
         string Open();
 
-        // Open the port with an event handler
-        string Open(EventHandler<IMidiEventArgs> handler);
-
         // Reset the port
         string Reset();
 

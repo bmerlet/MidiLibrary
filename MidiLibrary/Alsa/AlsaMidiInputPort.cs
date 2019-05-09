@@ -5,6 +5,7 @@ using System.Threading;
 using MidiLibrary.CommonMessages;
 using MidiLibrary.PortIO;
 using MidiLibrary.RealTimeMessages;
+using MidiLibrary.SysexMessages;
 
 namespace MidiLibrary.Alsa
 {
@@ -120,6 +121,7 @@ namespace MidiLibrary.Alsa
         private void ReadThreadStart()
         {
             byte[] buf = new byte[512];
+            byte[] overflowBuf = null;
 
             // Compute number of pollfd structures required to poll
             int numPollStructs = AlsaNativeMethods.Snd_rawmidi_poll_descriptors_count(handle);
@@ -167,30 +169,81 @@ namespace MidiLibrary.Alsa
 
                 if (evt.HasFlag(AlsaNativeMethods.EPoll.POLLIN))
                 {
-                    // We have something to read
-                    st = (int)AlsaNativeMethods.Snd_rawmidi_read(handle, buf, (uint)buf.Length);
-                    if (st < 0)
+                    // We have something to read - read it
+                    int nRead = (int)AlsaNativeMethods.Snd_rawmidi_read(handle, buf, (uint)buf.Length);
+                    if (nRead < 0)
                     {
+                        int errno = Marshal.GetLastWin32Error();
+                        if (errno == 4 /* EINTR */)
+                        {
+                            continue;
+                        }
+
                         Console.WriteLine("MidiIn: Cannot parse poll - " + AlsaUtils.StrError(st));
                         break;
                     }
 
-                    // Create a midi message from the input
-                    var midiMessage = ParseBuffer(buf, st);
-                    var midiEvent = new MidiEvent(midiMessage, 0);
-                    // ZZZ ZZZ
-                    var midiEventArg = new WindowsMultiMedia.WindowsMidiEventArgs(midiEvent, IntPtr.Zero, IntPtr.Zero);
-                    MidiInputReceived?.Invoke(this, midiEventArg);
+                    // Combine with overflow buffer if we had an overflow last time
+                    if (overflowBuf != null)
+                    {
+                        var newBuf = new byte[buf.Length + overflowBuf.Length];
+                        Array.Copy(overflowBuf, 0, newBuf, 0, overflowBuf.Length);
+                        Array.Copy(buf, 0, newBuf, overflowBuf.Length, buf.Length);
+                        buf = newBuf;
+                        overflowBuf = null;
+                    }
+
+                    // Translate the input to midi message
+                    int nParsed = 0;
+                    while (true)
+                    {
+                        st = ParseBuffer(buf, nParsed, nRead, out MidiMessage midiMessage);
+                        if (st < 0)
+                        {
+                            // buffer contains an incomplete message
+                            overflowBuf = buf;
+                            buf = new byte[overflowBuf.Length];
+                        }
+                        else if (st == 0)
+                        {
+                            // Message not supported - drop everything.
+                            break;
+                        }
+                        else // st > 0
+                        {
+                            // Send message
+                            var midiEvent = new MidiEvent(midiMessage, 0);
+                            var midiEventArg = new WindowsMultiMedia.WindowsMidiEventArgs(midiEvent, IntPtr.Zero, IntPtr.Zero);
+                            MidiInputReceived?.Invoke(this, midiEventArg);
+
+                            // Update counters
+                            nParsed += st;
+                            nRead -= st;
+                            
+                            if (nRead <= 0)
+                            {
+                                // Normal end
+                                break;
+                            }
+                        }
+                    }
                 }
             }
 
             Marshal.FreeHGlobal(pollAreaPtr);
         }
 
-        private MidiMessage ParseBuffer(byte[] data, int length)
+        private int ParseBuffer(byte[] data, int offset, int length, out MidiMessage message)
         {
-            MidiMessage result = null;
-            uint rawCommand = data[0];
+            message = null;
+            int messageLength = 0;
+            if (length == 0)
+            {
+                // Should not happen
+                return 0;
+            }
+
+            uint rawCommand = data[offset];
             uint channel = (rawCommand & 0x0f) + 1;
             EMidiCommand command = (EMidiCommand)(rawCommand & 0xF0);
 
@@ -199,30 +252,34 @@ namespace MidiLibrary.Alsa
                 // System message
                 channel = 0;
                 command = (EMidiCommand)rawCommand;
+                messageLength = 1;
 
                 switch (command)
                 {
                     case EMidiCommand.TimingClock:
-                        result = new TimingClockMessage();
+                        message = new TimingClockMessage();
                         break;
                     case EMidiCommand.StartSequence:
-                        result = new StartSequenceMessage();
+                        message = new StartSequenceMessage();
                         break;
                     case EMidiCommand.ContinueSequence:
-                        result = new ContinueSequenceMessage();
+                        message = new ContinueSequenceMessage();
                         break;
                     case EMidiCommand.StopSequence:
-                        result = new StopSequenceMessage();
+                        message = new StopSequenceMessage();
                         break;
                     case EMidiCommand.ActiveSensing:
-                        result = new ActiveSensingMessage();
+                        message = new ActiveSensingMessage();
+                        break;
+                    case EMidiCommand.SystemExclusive:
+                        messageLength = ParseSysex(data, offset, length, ref message);
                         break;
                 }
             }
             else
             {
-                uint p1 = data[1];
-                uint p2 = data[2];
+                uint p1 = (length >= 2) ? data[offset + 1] : 0u;
+                uint p2 = (length >= 3) ? data[offset + 2] : 0u;
 
                 // Common message
                 switch (command)
@@ -230,24 +287,55 @@ namespace MidiLibrary.Alsa
                     case EMidiCommand.NoteOff:
                     case EMidiCommand.NoteOn:
                     case EMidiCommand.KeyAfterTouch:
-                        result = new MidiNoteMessage(channel, command, p1, p2);
+                        message = new MidiNoteMessage(channel, command, p1, p2);
+                        messageLength = 3;
                         break;
                     case EMidiCommand.ControlChange:
-                        result = new MidiControlChangeMessage(channel, p1, p2);
+                        message = new MidiControlChangeMessage(channel, p1, p2);
+                        messageLength = 3;
                         break;
                     case EMidiCommand.PatchChange:
-                        result = new MidiPatchChangeMessage(channel, p1);
+                        message = new MidiPatchChangeMessage(channel, p1);
+                        messageLength = 2;
                         break;
                     case EMidiCommand.ChannelAfterTouch:
-                        result = new MidiChannelAfterTouchMessage(channel, p1);
+                        message = new MidiChannelAfterTouchMessage(channel, p1);
+                        messageLength = 2;
                         break;
                     case EMidiCommand.PitchWheelChange:
-                        result = new MidiPitchChangeMessage(channel, p1 + (p2 << 7));
+                        message = new MidiPitchChangeMessage(channel, p1 + (p2 << 7));
+                        messageLength = 3;
                         break;
+                }
+
+                // Indicate truncated message in reply
+                if (length < messageLength)
+                {
+                    messageLength = -1;
+
                 }
             }
 
-            return result;
+            return messageLength;
+        }
+
+        private int ParseSysex(byte[] data, int offset, int length, ref MidiMessage message)
+        {
+            var endOfSysexIndex = Array.FindIndex(data, 1, b => b == (byte)EMidiCommand.EndOfSystemExclusive);
+            if (endOfSysexIndex < 0)
+            {
+                // Incomplete sysex
+                return -1;
+            }
+
+            // Build body
+            var body = new byte[endOfSysexIndex - 1];
+            Array.Copy(data, 1, body, 0, body.Length);
+
+            // Build message
+            message = new MidiSysexMessage(body);
+
+            return endOfSysexIndex + 1;
         }
 
         #endregion
