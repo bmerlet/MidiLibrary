@@ -1,6 +1,13 @@
 # MidiLibrary
 
-The MidiLibrary project is a C# library (.DLL) to support projects using of MIDI on windows. It provides:
+The MidiLibrary project is a C# library (.DLL) to support projects using of MIDI.
+
+It is supported on:
+
+- Windows (using Windows Multimedia)
+- Linux (using ALSA)
+
+It provides:
 
 - Types for all midi messages, as well as tracks and sequences
 - Reading and writing of midi files
@@ -12,7 +19,7 @@ format. The instrument definition file provides synthesizer-specific definitions
 names and available controllers. MidiLibrary parses this information and makes it available to
 your application.
 
-This project is built using Microsoft VisualStudio 2013.
+This project is built using Microsoft Visual Studio or monodevelop.
 
 Feel free to use, complain, submit pull requests, etc...
 
